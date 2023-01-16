@@ -1,19 +1,17 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdDto;
-import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.AdsService;
 
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
+@RequiredArgsConstructor
 public class AdsController {
 
-    private final AdsServiceImpl adsService;
-
-    public AdsController(AdsServiceImpl adsService) {
-        this.adsService = adsService;
-    }
+    private final AdsService adsService;
 
     @GetMapping
     public void getAd(@RequestBody AdDto ad) {
@@ -35,7 +33,7 @@ public class AdsController {
         adsService.addComments(adPk);
     }
 
-    @GetMapping
+    @GetMapping("/ads/{id}")
     public void getFullAd(@PathVariable Integer id) {
         adsService.getFullAd(id);
     }
