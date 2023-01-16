@@ -1,21 +1,20 @@
 package ru.skypro.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.service.impl.UserServiceImpl;
+import ru.skypro.homework.service.UserService;
 
 import java.io.File;
 
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(value = "http://localhost:3000")
+@RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
     @PatchMapping("/me")
     public UserDto updateUser(@RequestBody UserDto user) {
         System.out.println("hello");
