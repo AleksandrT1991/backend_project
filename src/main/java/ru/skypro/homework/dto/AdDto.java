@@ -7,9 +7,9 @@ import java.io.File;
 @Data
 public class AdDto {
 
-    Integer authorId;
-    File image;
-    Integer pk;
-    Integer price;
-    String title;
+    private Integer id;
+    private File image;
+    private Integer pk;
+    private Integer price;
+    private String title;
 }
