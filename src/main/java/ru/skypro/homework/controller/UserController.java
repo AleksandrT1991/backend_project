@@ -2,7 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.service.UserService;
 
 import java.io.File;

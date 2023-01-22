@@ -3,8 +3,6 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.service.AdsImageService;
-import ru.skypro.homework.service.impl.AdsImageServiceImpl;
-import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 import java.io.File;
 
@@ -12,12 +10,12 @@ import java.io.File;
 @RequestMapping("/image")
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
-public class AdsImageController {
+public class UserImageController {
 
-    private final AdsImageService adsImageService;
+    private final UserImageService adsImageService;
 
     @PatchMapping("/{id}")
-    public void updateUserImage(@PathVariable String id, @RequestBody File file) {
+    public void updateUserImage(@PathVariable Long id, @RequestBody File file) {
         adsImageService.updateUserImage(id, file);
     }
 

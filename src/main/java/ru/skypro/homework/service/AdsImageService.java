@@ -6,5 +6,7 @@ import java.io.File;
 
 public interface AdsImageService {
 
-    public void updateUserImage(String id, File file);
+    public void updateAdsImage(Long id, File file);
+
+
 }
