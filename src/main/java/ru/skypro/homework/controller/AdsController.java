@@ -2,7 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.service.AdsService;
 
 @RestController
@@ -34,32 +34,32 @@ public class AdsController {
     }
 
     @GetMapping("/{id}")
-    public void getFullAd(@PathVariable Integer id) {
+    public void getFullAd(@PathVariable Long id) {
         adsService.getFullAd(id);
     }
 
     @DeleteMapping("/{id}")
-    public void removeAds(@PathVariable Integer id) {
+    public void removeAds(@PathVariable Long id) {
         adsService.removeAds(id);
     }
 
     @PatchMapping("/{id}")
-    public void updateAds(@PathVariable Integer id) {
+    public void updateAds(@PathVariable Long id) {
         adsService.updateAds(id);
     }
 
     @GetMapping("/{adPk}/comments/{id}")
-    public void getComments(@PathVariable Integer id, @PathVariable String adPk) {
+    public void getComments(@PathVariable Long id, @PathVariable String adPk) {
         adsService.getComments(id, adPk);
     }
 
     @DeleteMapping("/{adPk}/comments/{id}")
-    public void deleteComments(@PathVariable Integer id, @PathVariable String adPk) {
+    public void deleteComments(@PathVariable Long id, @PathVariable String adPk) {
         adsService.deleteComments(id, adPk);
     }
 
     @PatchMapping("/{adPk}/comments/{id}")
-    public void updateComments(@PathVariable Integer id, @PathVariable String adPk) {
+    public void updateComments(@PathVariable Long id, @PathVariable String adPk) {
         adsService.updateComments(id, adPk);
     }
 

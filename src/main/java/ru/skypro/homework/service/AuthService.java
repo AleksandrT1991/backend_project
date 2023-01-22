@@ -1,9 +1,8 @@
 package ru.skypro.homework.service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.user.RegisterReq;
+import ru.skypro.homework.dto.enums.Role;
 
 @Repository
 public interface AuthService{

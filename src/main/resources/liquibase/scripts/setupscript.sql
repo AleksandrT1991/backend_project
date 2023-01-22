@@ -4,7 +4,7 @@
 CREATE TABLE ads
 (
     id    BIGSERIAL PRIMARY KEY,
-    file  TEXT,
+    file  TEXT REFERENCES ad_images (file_path),
     pk    INTEGER,
     price INTEGER,
     title TEXT
@@ -24,7 +24,16 @@ CREATE TABLE users
 CREATE TABLE user_images
 (
     id         BIGSERIAL PRIMARY KEY,
-    user_id    INTEGER,
+    user_id    INTEGER REFERENCES users (id),
+    file_path  TEXT,
+    file_size  BIGINT DEFAULT 0,
+    media_type TEXT
+);
+
+CREATE TABLE ad_images
+(
+    id         BIGSERIAL PRIMARY KEY,
+    ad_id      INTEGER REFERENCES ads (id),
     file_path  TEXT,
     file_size  BIGINT DEFAULT 0,
     media_type TEXT

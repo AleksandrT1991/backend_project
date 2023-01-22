@@ -1,7 +1,6 @@
 package ru.skypro.homework.service;
 
-import org.springframework.stereotype.Repository;
-import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.ad.AdDto;
 
 public interface AdsService {
 
@@ -13,17 +12,17 @@ public interface AdsService {
 
     public void addComments(String adPk);
 
-    public void getFullAd(Integer id);
+    public void getFullAd(Long id);
 
-    public void removeAds(Integer id);
+    public void removeAds(Long id);
 
-    public void updateAds(Integer id);
+    public void updateAds(Long id);
 
-    public void getComments(Integer id, String adPk);
+    public void getComments(Long id, String adPk);
 
-    public void deleteComments(Integer id, String adPk);
+    public void deleteComments(Long id, String adPk);
 
-    public void updateComments(Integer id, String adPk) ;
+    public void updateComments(Long id, String adPk) ;
 
     public void getAdsMe(AdDto ad);
 }
