@@ -15,7 +15,7 @@ public class UserImage {
     private Long id;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "file_path")
     @Type(type = "org.hibernate.type.TextType")
@@ -27,5 +27,4 @@ public class UserImage {
     @Column(name = "media_type")
     @Type(type = "org.hibernate.type.TextType")
     private String mediaType;
-
 }

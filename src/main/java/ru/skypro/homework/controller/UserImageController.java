@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.service.AdsImageService;
+import ru.skypro.homework.service.UserImageService;
 
 import java.io.File;
 
@@ -12,11 +13,11 @@ import java.io.File;
 @RequiredArgsConstructor
 public class UserImageController {
 
-    private final UserImageService adsImageService;
+    private final UserImageService userImageService;
 
     @PatchMapping("/{id}")
     public void updateUserImage(@PathVariable Long id, @RequestBody File file) {
-        adsImageService.updateUserImage(id, file);
+        userImageService.updateUserImage(id, file);
     }
 
 }
