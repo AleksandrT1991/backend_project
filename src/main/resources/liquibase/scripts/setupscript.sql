@@ -4,7 +4,6 @@
 CREATE TABLE ads
 (
     id    BIGSERIAL PRIMARY KEY,
-    file  TEXT REFERENCES ad_images (file_path),
     pk    INTEGER,
     price INTEGER,
     title TEXT

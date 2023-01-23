@@ -30,17 +30,21 @@ public class AdsServiceImpl implements AdsService {
         adRepository.save(AdMapper.INSTANCE.toEntity(ad));
     }
 
-    public List<AdComment> getComments(String adPk) {
-        Ad ad = adRepository.findByPk(adPk);
-        adC
+    @Override
+    public void getComments(String adPk) {
+
     }
+
+//    public List<AdComment> getComments(String adPk) {
+//        Ad ad = adRepository.findByPk(adPk);
+//    }
 
     public void addComments(String adPk) {
         
     }
 
     public void getFullAd(Long id) {
-        adRepository.findById(id)
+        adRepository.findById(id);
     }
 
     public void removeAds(Long id) {
