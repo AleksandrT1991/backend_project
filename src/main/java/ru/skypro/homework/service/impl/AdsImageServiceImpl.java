@@ -3,12 +3,8 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
-import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.repository.AdImageRepository;
-import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.UserImageRepository;
 import ru.skypro.homework.service.AdsImageService;
 
 import java.io.File;

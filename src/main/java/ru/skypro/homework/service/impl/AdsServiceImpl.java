@@ -2,14 +2,10 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ad.AdDto;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.AdComment;
 import ru.skypro.homework.mappers.AdMapper;
 import ru.skypro.homework.repository.AdCommentRepository;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsService;
-
-import java.util.List;
 
 @Service
 public class AdsServiceImpl implements AdsService {
