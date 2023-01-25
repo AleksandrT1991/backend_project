@@ -25,8 +25,8 @@ public class UserImageServiceImpl implements UserImageService {
     private final UserImageRepository userImageRepository;
     private final UserRepository userRepository;
 
-    @Value("${user.photo.dir.path}")
-    private String photoDir;
+    @Value("${user.image.dir.path}")
+    private String imageDir;
 
     public UserImageServiceImpl(UserImageRepository userImageRepository, UserRepository userRepository) {
         this.userImageRepository = userImageRepository;
@@ -36,7 +36,7 @@ public class UserImageServiceImpl implements UserImageService {
     public void uploadPhoto(Long userId, MultipartFile file) throws IOException {
         Optional<User> user = userRepository.findUserById(userId);
 
-        Path filePath = Path.of(photoDir, userId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Path filePath = Path.of(imageDir, userId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -58,9 +58,8 @@ public class UserImageServiceImpl implements UserImageService {
     }
 
     public UserImage findUserImage(Long userId) {
-//        Optional<UserImage> userImageByUserId = Optional.ofNullable(userImageRepository.findByUser(userId));
-//        return userReportPhotosByUserReportId.orElse(new UserReportPhoto());
-        return new UserImage();
+        Optional<UserImage> userImageByUserId = Optional.ofNullable(userImageRepository.findByUserId(userId));
+        return userImageByUserId.orElse(new UserImage());
     }
 
     private String getExtension(String fileName) {
