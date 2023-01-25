@@ -1,8 +1,12 @@
 package ru.skypro.homework.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+//@Table(name = "ad_comment")
 public class AdComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

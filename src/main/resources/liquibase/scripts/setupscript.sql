@@ -38,6 +38,14 @@ CREATE TABLE ad_images
     media_type TEXT
 );
 
+CREATE TABLE ad_comments
+(
+    author     INTEGER REFERENCES users (id),
+    created_ad TEXT,
+    pk         INTEGER PRIMARY KEY,
+    text       TEXT
+);
+
 
 
 

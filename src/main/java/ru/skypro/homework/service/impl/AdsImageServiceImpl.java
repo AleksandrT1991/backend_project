@@ -5,13 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
-import ru.skypro.homework.entity.User;
-import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.repository.AdImageRepository;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.UserImageRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsImageService;
 
 import javax.imageio.ImageIO;
@@ -41,10 +38,10 @@ public class AdsImageServiceImpl implements AdsImageService {
         this.adRepository = adRepository;
     }
 
-    public void uploadPhoto(Long userId, MultipartFile file) throws IOException {
-        Optional<User> user = userRepository.findUserById(userId);
+    public void uploadPhoto(Long adId, MultipartFile file) throws IOException {
+        Optional<Ad> ad = adRepository.findAdById(adId);
 
-        Path filePath = Path.of(imageDir, userId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Path filePath = Path.of(imageDir, adId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -56,18 +53,18 @@ public class AdsImageServiceImpl implements AdsImageService {
             bis.transferTo(bos);
         }
 
-        UserImage userImage = findUserImage(userId);
-        userImage.setUserId(userId);
-        userImage.setFilePath(filePath.toString());
-        userImage.setFileSize(file.getSize());
-        userImage.setMediaType(file.getContentType());
+        AdImage adImage = findAdImage(adId);
+        adImage.setAdId(adId);
+        adImage.setFilePath(filePath.toString());
+        adImage.setFileSize(file.getSize());
+        adImage.setMediaType(file.getContentType());
 
-        userImageRepository.save(userImage);
+        adImageRepository.save(adImage);
     }
 
-    public UserImage findUserImage(Long userId) {
-        Optional<UserImage> userImageByUserId = Optional.ofNullable(userImageRepository.findByUserId(userId));
-        return userImageByUserId.orElse(new UserImage());
+    public AdImage findAdImage(Long adId) {
+        Optional<AdImage> userImageByUserId = Optional.ofNullable(adImageRepository.findByAdId(adId));
+        return userImageByUserId.orElse(new AdImage());
     }
 
     private String getExtension(String fileName) {
@@ -91,7 +88,7 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     @Override
-    public void updateUserImage(Long id, File file) {
+    public void updateAdImage(Long id, File file) {
 
     }
     public void updateAdsImage(Long id, File file) {
