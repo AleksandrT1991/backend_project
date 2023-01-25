@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ public class UserImageServiceImpl implements UserImageService {
 
     @Value("${user.image.dir.path}")
     private String imageDir;
+
 
     public UserImageServiceImpl(UserImageRepository userImageRepository, UserRepository userRepository) {
         this.userImageRepository = userImageRepository;
