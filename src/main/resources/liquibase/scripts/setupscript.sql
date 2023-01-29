@@ -5,6 +5,7 @@ CREATE TABLE ads
 (
     id    BIGSERIAL PRIMARY KEY,
     pk    INTEGER,
+    file TEXT,
     price INTEGER,
     title TEXT
 );

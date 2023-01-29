@@ -39,27 +39,7 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     public void uploadPhoto(Long adId, MultipartFile file) throws IOException {
-        Optional<Ad> ad = adRepository.findAdById(adId);
 
-        Path filePath = Path.of(imageDir, adId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-
-        try (InputStream is = file.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
-        ) {
-            bis.transferTo(bos);
-        }
-
-        AdImage adImage = findAdImage(adId);
-        adImage.setAdId(adId);
-        adImage.setFilePath(filePath.toString());
-        adImage.setFileSize(file.getSize());
-        adImage.setMediaType(file.getContentType());
-
-        adImageRepository.save(adImage);
     }
 
     public AdImage findAdImage(Long adId) {
@@ -88,11 +68,27 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     @Override
-    public void updateAdImage(Long id, File file) {
+    public void updateAdsImage(Long id, MultipartFile file) throws IOException {
+        //Optional<Ad> ad = adRepository.findAdById(id);
 
-    }
-    public void updateAdsImage(Long id, File file) {
-        Optional<AdImage> adImage = adImageRepository.findById(id);
-        adImageRepository.save(adImage.get());
+        Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (InputStream is = file.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+
+        AdImage adImage = findAdImage(id);
+        //adImage.setAdId(ad.get().getId());
+        adImage.setFilePath(filePath.toString());
+        adImage.setFileSize(file.getSize());
+        adImage.setMediaType(file.getContentType());
+
+        adImageRepository.save(adImage);
     }
 }
