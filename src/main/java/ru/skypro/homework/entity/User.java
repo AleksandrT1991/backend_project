@@ -14,6 +14,10 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "userId")
+    @Type(type = "org.hibernate.type.TextType")
+    private Long userId;
+
     @Column(name = "phone")
     @Type(type = "org.hibernate.type.TextType")
     private String phone;

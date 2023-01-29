@@ -1,12 +1,22 @@
 package ru.skypro.homework.service;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.User;
 
-import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    public void setPassword(String currentPassword, String newPassword);
+//     User setPassword(String currentPassword, String newPassword);
+//
+//     void updateUserImage(Long userId, MultipartFile file);
 
-    public void updateUserImage(File file);
+     User addUser(User user);
+
+     List<User> getAllUser();
+
+     Optional<User> findUser(Long userId);
+
+
 }

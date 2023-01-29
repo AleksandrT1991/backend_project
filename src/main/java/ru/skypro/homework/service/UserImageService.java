@@ -1,8 +1,12 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
+import java.io.IOException;
 
 public interface UserImageService {
 
-    void updateUserImage(Long id, File file);
+    void uploadPhoto(Long userId, MultipartFile file) throws IOException;
+
 }

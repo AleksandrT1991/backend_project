@@ -9,4 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserImageRepository extends JpaRepository <UserImage, Long> {
+    UserImage findByUserId(Long userId);
 }

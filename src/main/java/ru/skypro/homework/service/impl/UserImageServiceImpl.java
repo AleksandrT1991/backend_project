@@ -3,12 +3,14 @@ package ru.skypro.homework.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.repository.UserImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserImageService;
+import ru.skypro.homework.service.UserService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,29 +18,27 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class UserImageServiceImpl implements UserImageService {
-    private final UserImageRepository userImageRepository;
-    private final UserRepository userRepository;
 
-    @Value("${user.image.dir.path}")
+    private final UserImageRepository userImageRepository;
+    private final UserService userService;
+
+    public UserImageServiceImpl(UserImageRepository userImageRepository, UserService userService) {
+        this.userImageRepository = userImageRepository;
+        this.userService = userService;
+    }
+    @Value("")
     private String imageDir;
 
-
-    public UserImageServiceImpl(UserImageRepository userImageRepository, UserRepository userRepository) {
-        this.userImageRepository = userImageRepository;
-        this.userRepository = userRepository;
-    }
-
+    @Override
     public void uploadPhoto(Long userId, MultipartFile file) throws IOException {
-        Optional<User> user = userRepository.findUserById(userId);
-
-        Path filePath = Path.of(imageDir, userId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Optional<User> user = userService.findUser(userId);
+        Path filePath = Path.of(imageDir, userId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -49,7 +49,6 @@ public class UserImageServiceImpl implements UserImageService {
         ) {
             bis.transferTo(bos);
         }
-
         UserImage userImage = findUserImage(userId);
         userImage.setUserId(userId);
         userImage.setFilePath(filePath.toString());
@@ -82,10 +81,5 @@ public class UserImageServiceImpl implements UserImageService {
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
-    }
-
-    @Override
-    public void updateUserImage(Long id, File file) {
-
     }
 }
