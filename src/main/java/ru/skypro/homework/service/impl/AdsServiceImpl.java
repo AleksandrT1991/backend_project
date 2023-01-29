@@ -1,8 +1,9 @@
 package ru.skypro.homework.service.impl;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ad.AdDto;
-import ru.skypro.homework.mappers.AdMapper;
+import ru.skypro.homework.mappers.AdsMapper;
 import ru.skypro.homework.repository.AdCommentRepository;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsService;
@@ -19,11 +20,11 @@ public class AdsServiceImpl implements AdsService {
     }
 
     public void getAd(AdDto ad) {
-        adRepository.findById(ad.getId());
+        adRepository.findById(AdsMapper.INSTANCE.toEntity(ad).getId());
     }
 
     public void addAd(AdDto ad) {
-        adRepository.save(AdMapper.INSTANCE.toEntity(ad));
+        adRepository.save(AdsMapper.INSTANCE.toEntity(ad));
     }
 
     @Override

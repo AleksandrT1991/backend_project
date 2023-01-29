@@ -8,7 +8,7 @@ import java.io.File;
 public class AdDto {
 
     private Long id;
-    private File image;
+    private String image;
     private Integer pk;
     private Integer price;
     private String title;
