@@ -5,10 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
-import ru.skypro.homework.repository.AdImageRepository;
-import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.ad.AdImageRepository;
+import ru.skypro.homework.repository.ad.AdRepository;
 import ru.skypro.homework.service.AdsImageService;
 
 import javax.imageio.ImageIO;
@@ -85,6 +84,27 @@ public class AdsImageServiceImpl implements AdsImageService {
 
         AdImage adImage = findAdImage(id);
         //adImage.setAdId(ad.get().getId());
+        adImage.setFilePath(filePath.toString());
+        adImage.setFileSize(file.getSize());
+        adImage.setMediaType(file.getContentType());
+
+        adImageRepository.save(adImage);
+    }
+
+    @Override
+    public void createImage(MultipartFile file) throws IOException {
+        Path filePath = Path.of(imageDir,  file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (InputStream is = file.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+        AdImage adImage = new AdImage();
         adImage.setFilePath(filePath.toString());
         adImage.setFileSize(file.getSize());
         adImage.setMediaType(file.getContentType());

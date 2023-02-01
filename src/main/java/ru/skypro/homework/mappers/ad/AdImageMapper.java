@@ -1,9 +1,8 @@
-package ru.skypro.homework.mappers;
+package ru.skypro.homework.mappers.ad;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.ad.AdImageDto;
-import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
 
 @Mapper
