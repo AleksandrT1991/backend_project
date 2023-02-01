@@ -2,28 +2,45 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ad.AdDto;
-import ru.skypro.homework.mappers.AdMapper;
-import ru.skypro.homework.repository.AdCommentRepository;
-import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.dto.ad.CreateAdDto;
+import ru.skypro.homework.dto.ad.FullAdDto;
+import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.mappers.ad.AdsMapper;
+import ru.skypro.homework.mappers.ad.CreateAdsMapper;
+import ru.skypro.homework.mappers.ad.FullAdMapper;
+import ru.skypro.homework.repository.ad.AdCommentRepository;
+import ru.skypro.homework.repository.ad.AdRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdsServiceImpl implements AdsService {
 
     private final AdRepository adRepository;
     private final AdCommentRepository adCommentRepository;
+    private final AdsMapper adsMapper;
 
-    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository) {
+    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository,
+                          AdsMapper adsMapper) {
         this.adRepository = adRepository;
         this.adCommentRepository = adCommentRepository;
+        this.adsMapper = adsMapper;
     }
 
-    public void getAd(AdDto ad) {
-        adRepository.findById(ad.getId());
+    @Override
+    public List<AdDto> getAds() {
+        return adRepository.findAll().stream().map(adsMapper::toDto).collect(Collectors.toList());
     }
 
     public void addAd(AdDto ad) {
-        adRepository.save(AdMapper.INSTANCE.toEntity(ad));
+        adRepository.save(AdsMapper.INSTANCE.toEntity(ad));
+    }
+
+    @Override
+    public Ad createAdd(CreateAdDto createAdDto) {
+        return adRepository.save(CreateAdsMapper.INSTANCE.toEntity(createAdDto));
     }
 
     @Override
@@ -39,8 +56,8 @@ public class AdsServiceImpl implements AdsService {
         
     }
 
-    public void getFullAd(Long id) {
-        adRepository.findById(id);
+    public FullAdDto getFullAd(Long id) {
+        return FullAdMapper.INSTANCE.toDto(adRepository.findById(id).get());
     }
 
     public void removeAds(Long id) {

@@ -1,13 +1,12 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
-import ru.skypro.homework.repository.UserImageRepository;
-import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.repository.user.UserImageRepository;
+import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.UserImageService;
 
 import javax.imageio.ImageIO;

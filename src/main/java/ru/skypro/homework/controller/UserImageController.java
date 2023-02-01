@@ -13,11 +13,11 @@ import java.io.File;
 @RequiredArgsConstructor
 public class UserImageController {
 
-    private final UserImageService userImageService;
-
-    @PatchMapping("/{id}")
-    public void updateUserImage(@PathVariable Long id, @RequestBody File file) {
-        userImageService.updateUserImage(id, file);
-    }
+//    private final UserImageService userImageService;
+//
+//    @PatchMapping("/{id}")
+//    public void updateUserImage(@PathVariable Long id, @RequestBody File file) {
+//        userImageService.updateUserImage(id, file);
+//    }
 
 }

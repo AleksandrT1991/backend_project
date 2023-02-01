@@ -1,4 +1,4 @@
-package ru.skypro.homework.repository;
+package ru.skypro.homework.repository.user;
 
 import liquibase.license.LicenseService;
 import org.springframework.data.jpa.repository.JpaRepository;

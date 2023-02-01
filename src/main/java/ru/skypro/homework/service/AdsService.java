@@ -1,18 +1,25 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.ad.AdDto;
+import ru.skypro.homework.dto.ad.CreateAdDto;
+import ru.skypro.homework.dto.ad.FullAdDto;
+import ru.skypro.homework.entity.Ad;
+
+import java.util.List;
 
 public interface AdsService {
 
-    public void getAd(AdDto ad);
+    public List<AdDto> getAds();
 
     public void addAd(AdDto ad);
+
+    public Ad createAdd(CreateAdDto createAdDto);
 
     public void getComments(String adPk);
 
     public void addComments(String adPk);
 
-    public void getFullAd(Long id);
+    public FullAdDto getFullAd(Long id);
 
     public void removeAds(Long id);
 
