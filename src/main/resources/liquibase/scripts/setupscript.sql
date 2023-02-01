@@ -3,11 +3,17 @@
 -- changeset atsygulev:1
 CREATE TABLE ads
 (
-    id    BIGSERIAL PRIMARY KEY,
-    pk    INTEGER,
-    file TEXT,
-    price INTEGER,
-    title TEXT
+    id                INTEGER,
+    pk                BIGSERIAL PRIMARY KEY,
+    file              TEXT,
+    price             INTEGER,
+    title             TEXT,
+    description       TEXT,
+    phone             TEXT,
+    author_first_name TEXT,
+    author_last_name  TEXT,
+    email             TEXT,
+    image             TEXT
 );
 
 CREATE TABLE users
@@ -33,7 +39,7 @@ CREATE TABLE user_images
 CREATE TABLE ad_images
 (
     id         BIGSERIAL PRIMARY KEY,
-    ad_id      INTEGER REFERENCES ads (id),
+    ad_pk      INTEGER REFERENCES ads (pk),
     file_path  TEXT,
     file_size  BIGINT DEFAULT 0,
     media_type TEXT
