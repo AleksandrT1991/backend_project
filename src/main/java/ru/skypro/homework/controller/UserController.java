@@ -45,11 +45,10 @@ public class UserController {
         userService.addUser(user);
     }
 
-    /**
-     *
-     * @param currentPassword
-     * @param newPassword
-     */
+//    /**
+//     * @param currentPassword
+//     * @param newPassword
+//     */
 //    @PostMapping("/set_password")
 //    public void setPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
 //        userService.setPassword(currentPassword, newPassword);
@@ -69,4 +68,16 @@ public class UserController {
 //        userService.updateUserImage(id, userImage);
 //        return ResponseEntity.ok().build();
 //    }
-}
+
+    @DeleteMapping("/{userName}")
+    public ResponseEntity deleteUser(@PathVariable String userName) {
+        userService.deleteByUserName(userName);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUsers(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+    }
+

@@ -2,9 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.repository.UserImageRepository;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.UserImageService;
+import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 import java.util.List;
@@ -58,5 +56,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findUser(Long userId){
         return userRepository.findUserById(userId);
+    }
+
+//    @Override
+//    public Optional<User> deleteUser(String userName) {
+//        Optional<User> optional = userRepository.findByUserName(userName);
+//        userRepository.deleteByUserName(userName);
+//        return  optional;
+//
+//    }
+    @Override
+    public void deleteByUserName(String userName) {
+        userRepository.deleteByUserName(userName);
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

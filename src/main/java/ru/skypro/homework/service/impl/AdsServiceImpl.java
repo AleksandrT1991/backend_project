@@ -20,18 +20,15 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdRepository adRepository;
     private final AdCommentRepository adCommentRepository;
-    private final AdsMapper adsMapper;
 
-    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository,
-                          AdsMapper adsMapper) {
+    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository) {
         this.adRepository = adRepository;
         this.adCommentRepository = adCommentRepository;
-        this.adsMapper = adsMapper;
     }
 
     @Override
     public List<AdDto> getAds() {
-        return adRepository.findAll().stream().map(adsMapper::toDto).collect(Collectors.toList());
+        return adRepository.findAll().stream().map(AdsMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 
     public void addAd(AdDto ad) {

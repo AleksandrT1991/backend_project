@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.User;
 
 import java.util.List;
@@ -18,5 +17,7 @@ public interface UserService {
 
      Optional<User> findUser(Long userId);
 
+     void deleteByUserName (String userName);
 
+    void deleteById(Long id);
 }

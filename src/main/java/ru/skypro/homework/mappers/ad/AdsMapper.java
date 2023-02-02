@@ -14,7 +14,7 @@ import ru.skypro.homework.entity.Ad;
 )
 public interface AdsMapper {
 
-    AdsMapper INSTANCE = Mappers.getMapper( AdsMapper.class );
+    AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
     AdDto toDto(Ad ad);
 
