@@ -18,7 +18,8 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login", "/register",
+            "/ads/**", "/users/**"
     };
 
     @Bean
@@ -34,18 +35,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().ignoringAntMatchers(AUTH_WHITELIST).and()
                 .authorizeHttpRequests((authz) ->
                         authz
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-
+                                .anyRequest().authenticated()
+                                //.mvcMatchers("/ads/**", "/users/**").authenticated()
                 )
-                .cors().disable()
+                .csrf().disable()
+                .cors().and()
                 .httpBasic(withDefaults());
         return http.build();
     }
-
-
 }
 
