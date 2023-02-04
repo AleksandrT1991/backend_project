@@ -38,6 +38,19 @@ public class User {
     @Type(type = "org.hibernate.type.TextType")
     private String phone;
 
+    @Column(name= "regdate")
+    @Type(type = "org.hibernate.type.TextType")
+    private String regDate;
+
+    @Column(name= "city")
+    @Type(type = "org.hibernate.type.TextType")
+    private String city;
+
+    @Column(name= "userimage")
+    @Type(type = "org.hibernate.type.TextType")
+    private String userImage;
+
+
 //    @Column(name = "userstatus")
 //    @Type(type = "org.hibernate.type.TextType")
 //    private Integer userStatus;

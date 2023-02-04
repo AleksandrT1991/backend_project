@@ -13,6 +13,7 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -22,36 +23,55 @@ public class UserController {
 
     private final UserService userService;
 
-    @PatchMapping("/me")
-    public UserDto updateUser(@RequestBody UserDto user) {
-        System.out.println("hello");
-        return new UserDto();
+    /**
+     *
+     * @param user
+     * @return
+     */
+    @PatchMapping("/me/updateUser")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        Optional<User> result = userService.updateUser(user);
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(result.get());
     }
 
     /**
      *
      * @return
      */
-    @GetMapping("/me")
-        public List<User> getAllUser() {
+    @GetMapping("/me/getUser")
+        public List<User> getUser() {
         return userService.getAllUser();
     }
+
     /**
-     *
-     * @param user
+     * @param currentPassword
+     * @param newPassword
      */
-    @PostMapping("/create_user")
-    public void createUser(@Parameter(hidden = false) @RequestBody User user) {
-        userService.addUser(user);
+    @PostMapping("/set_password")
+    public void setPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
+//        userService.setPassword(currentPassword,newPassword);
+    }
+
+    @PatchMapping(value = "/me/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateUserImage(@PathVariable Long id,
+                                                  @RequestParam MultipartFile userImage) throws Exception {
+        if (userImage.getSize() > 1024 * 300) {
+            ResponseEntity.badRequest().body("File is to big");
+        }
+        userService.updateUserImage(id, userImage);
+        return ResponseEntity.ok().build();
     }
 
 //    /**
-//     * @param currentPassword
-//     * @param newPassword
+//     *
+//     * @param user
 //     */
-//    @PostMapping("/set_password")
-//    public void setPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
-//        userService.setPassword(currentPassword, newPassword);
+//    @PostMapping("/create_user")
+//    public void createUser(@Parameter(hidden = false) @RequestBody User user) {
+//        userService.addUser(user);
 //    }
 
 //    @PatchMapping("/me/image")
@@ -59,25 +79,17 @@ public class UserController {
 //        userService.updateUserImage(file);
 //    }
 //
-//    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<String> updateUserImage(@PathVariable Long id,
-//                                                  @RequestParam MultipartFile userImage) throws Exception {
-//        if (userImage.getSize() > 1024 * 300) {
-//            ResponseEntity.badRequest().body("File is to big");
-//        }
-//        userService.updateUserImage(id, userImage);
+
+//    @DeleteMapping(value = "/{userName}")
+//    public ResponseEntity deleteUserByName(@PathVariable String userName) {
+//        userService.deleteByUserName(userName);
 //        return ResponseEntity.ok().build();
 //    }
 
-    @DeleteMapping("/{userName}")
-    public ResponseEntity deleteUser(@PathVariable String userName) {
-        userService.deleteByUserName(userName);
-        return ResponseEntity.ok().build();
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteUsers(@PathVariable Long id) {
-        userService.deleteById(id);
-        return ResponseEntity.ok().build();
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity deleteUsers(@PathVariable Long id) {
+//        userService.deleteById(id);
+//        return ResponseEntity.ok().build();
+//    }
     }
 
