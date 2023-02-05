@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.repository.user.UserImageRepository;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userImageRepository = userImageRepository;
     }
-    @Value("")
+    @Value("${user.image.dir.path}")
     private String imageDir;
 
     @Override
@@ -88,14 +89,25 @@ public class UserServiceImpl implements UserService {
         ) {
             bis.transferTo(bos);
         }
-        UserImage userImage = userImageRepository.findByUserId(id);
+        UserImage userImage = new UserImage();
         userImage.setUserId(id);
         userImage.setFilePath(filePath.toString());
         userImage.setFileSize(file.getSize());
         userImage.setMediaType(file.getContentType());
         userImageRepository.save(userImage);
     }
-//    private String getExtensions(String fileName) {
+
+    @Override
+    public PasswordDto setPassword(PasswordDto passwordDto) {
+        User user = userRepository.findUserById(1L).get();
+        if (passwordDto.getCurrentPassword().equals(user.getPassword())) {
+            user.setPassword(passwordDto.getNewPassword());
+            userRepository.save(user);
+        }
+        return passwordDto;
+    }
+
+    //    private String getExtensions(String fileName) {
 //        return fileName.substring(fileName.lastIndexOf(".") + 1);
 //    }
     private String getExtension(String fileName) {

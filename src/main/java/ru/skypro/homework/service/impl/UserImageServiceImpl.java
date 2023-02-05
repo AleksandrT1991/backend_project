@@ -33,7 +33,7 @@ public class UserImageServiceImpl implements UserImageService {
         this.userImageRepository = userImageRepository;
         this.userService = userService;
     }
-    @Value("")
+    @Value("${user.image.dir.path}")
     private String imageDir;
 
     @Override

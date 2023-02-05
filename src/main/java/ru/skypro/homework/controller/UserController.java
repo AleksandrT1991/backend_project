@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.UserService;
@@ -46,13 +47,10 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    /**
-     * @param currentPassword
-     * @param newPassword
-     */
+
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
-//        userService.setPassword(currentPassword,newPassword);
+    public void setPassword(@RequestBody PasswordDto passwordDto) {
+        userService.setPassword(passwordDto);
     }
 
     @PatchMapping(value = "/me/{id}/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

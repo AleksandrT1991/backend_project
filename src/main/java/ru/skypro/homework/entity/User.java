@@ -51,6 +51,8 @@ public class User {
     private String userImage;
 
 
+
+
 //    @Column(name = "userstatus")
 //    @Type(type = "org.hibernate.type.TextType")
 //    private Integer userStatus;

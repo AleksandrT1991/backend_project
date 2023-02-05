@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.entity.User;
 
 import java.io.IOException;
@@ -26,6 +27,9 @@ public interface UserService {
      Optional<User>updateUser (User user);
 
      void updateUserImage(Long id, MultipartFile userImage) throws IOException;
+
+     PasswordDto setPassword(PasswordDto passwordDto);
+
 
 //     void setPassword(String currentPassword, String newPassword);
 }
