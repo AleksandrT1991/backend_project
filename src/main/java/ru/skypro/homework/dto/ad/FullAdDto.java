@@ -2,6 +2,8 @@ package ru.skypro.homework.dto.ad;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FullAdDto {
 
@@ -9,7 +11,7 @@ public class FullAdDto {
     String authorLastName;
     String description;
     String email;
-    String image;
+    List<String> image;
     String phone;
     Long pk;
     Long price;

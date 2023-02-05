@@ -10,7 +10,6 @@ public interface CreateAdsMapper {
 
     CreateAdsMapper INSTANCE = Mappers.getMapper( CreateAdsMapper.class );
 
-
     CreateAdDto toDto(Ad ad);
 
     Ad toEntity(CreateAdDto createAdDto);

@@ -4,23 +4,19 @@ import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "ads")
 public class Ad {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
-    @Column(name = "file")
-    @Type(type = "org.hibernate.type.TextType")
-    private String file;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "pk", nullable = false)
-    private Integer pk;
+    private Long pk;
 
     @Column(name = "price")
     private Integer price;
@@ -51,6 +47,9 @@ public class Ad {
 
     @Column(name = "image")
     @Type(type = "org.hibernate.type.TextType")
-    private String image;
+    private List<String> image;
+
+    @Column(name = "author")
+    private Long author;
 
 }

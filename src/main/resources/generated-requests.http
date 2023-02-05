@@ -83,9 +83,10 @@ Content-Disposition:form-data; name="properties"
 Content-Type: application/json
 
 {
-  "description": "string",
-  "price": 0,
-  "title": "string"
+  "description": "test ad desc",
+  "price": 1000,
+  "title": "test ad title",
+  "author": 1
 }
 
 --WebAppBoundary
