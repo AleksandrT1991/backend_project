@@ -1,11 +1,15 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.service.AdsImageService;
 import ru.skypro.homework.service.UserImageService;
 
 import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/image")
@@ -13,11 +17,18 @@ import java.io.File;
 @RequiredArgsConstructor
 public class UserImageController {
 
-//    private final UserImageService userImageService;
-//
-//    @PatchMapping("/{id}")
-//    public void updateUserImage(@PathVariable Long id, @RequestBody File file) {
-//        userImageService.updateUserImage(id, file);
-//    }
+    private final UserImageService userImageService;
+
+
+
+    @PatchMapping(value = "/{userId}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateUserImage(@PathVariable Long userId,
+                                                  @RequestParam MultipartFile file) throws IOException {
+        if (file.getSize() > 1024 * 300) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        userImageService.uploadPhoto(userId, file);
+        return ResponseEntity.ok().build();
+    }
 
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -27,4 +28,5 @@ public class UserImage {
     @Column(name = "media_type")
     @Type(type = "org.hibernate.type.TextType")
     private String mediaType;
+
 }

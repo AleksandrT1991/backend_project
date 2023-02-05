@@ -1,11 +1,20 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.UserService;
 
 import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -15,25 +24,70 @@ public class UserController {
 
     private final UserService userService;
 
-    @PatchMapping("/me")
-    public UserDto updateUser(@RequestBody UserDto user) {
-        System.out.println("hello");
-        return new UserDto();
+    /**
+     *
+     * @param user
+     * @return
+     */
+    @PatchMapping("/me/updateUser")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        Optional<User> result = userService.updateUser(user);
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(result.get());
     }
 
-    @GetMapping("/me")
-    public UserDto getUser(@RequestBody UserDto user) {
-        //тут сервис юзера
-        return new UserDto();
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/me/getUser")
+        public List<User> getUser() {
+        return userService.getAllUser();
     }
+
 
     @PostMapping("/set_password")
-    public void setPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
-        userService.setPassword(currentPassword, newPassword);
+    public void setPassword(@RequestBody PasswordDto passwordDto) {
+        userService.setPassword(passwordDto);
     }
 
-    @PatchMapping("/me/image")
-    public void updateUserImage(@RequestBody File file) {
-        userService.updateUserImage(file);
+    @PatchMapping(value = "/me/{id}/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateUserImage(@PathVariable Long id,
+                                                  @RequestParam MultipartFile file) throws Exception {
+        if (file.getSize() > 1024 * 300) {
+            ResponseEntity.badRequest().body("File is to big");
+        }
+        userService.updateUserImage(id, file);
+        return ResponseEntity.ok().build();
     }
-}
+
+//    /**
+//     *
+//     * @param user
+//     */
+//    @PostMapping("/create_user")
+//    public void createUser(@Parameter(hidden = false) @RequestBody User user) {
+//        userService.addUser(user);
+//    }
+
+//    @PatchMapping("/me/image")
+//    public void updateUserImage(@RequestBody File file) {
+//        userService.updateUserImage(file);
+//    }
+//
+
+//    @DeleteMapping(value = "/{userName}")
+//    public ResponseEntity deleteUserByName(@PathVariable String userName) {
+//        userService.deleteByUserName(userName);
+//        return ResponseEntity.ok().build();
+//    }
+
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity deleteUsers(@PathVariable Long id) {
+//        userService.deleteById(id);
+//        return ResponseEntity.ok().build();
+//    }
+    }
+

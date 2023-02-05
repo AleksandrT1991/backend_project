@@ -29,7 +29,7 @@ public class AdsImageServiceImpl implements AdsImageService {
     private final AdImageRepository adImageRepository;
     private final AdRepository adRepository;
 
-    @Value("${ad.image.dir.path}")
+    @Value("")
     private String imageDir;
 
     public AdsImageServiceImpl(AdImageRepository adImageRepository, AdRepository adRepository) {
