@@ -1,6 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -13,11 +14,17 @@ public class AdComment {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
+    @JoinColumn(name = "author")
+    private Long author;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "created_ad")
+    @Type(type = "org.hibernate.type.TextType")
+    private String createdAd;
+
+    @JoinColumn(name = "pk")
+    private Long pk;
+
+    @Column(name = "text")
+    @Type(type = "org.hibernate.type.TextType")
+    private String text;
 }

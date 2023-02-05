@@ -1,35 +1,34 @@
 package ru.skypro.homework.service;
 
+import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.CreateAdDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
-import ru.skypro.homework.entity.Ad;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AdsService {
 
     public List<AdDto> getAds();
 
-    public void addAd(AdDto ad);
+    public AdDto createAdd(CreateAdDto createAdDto);
 
-    public Ad createAdd(CreateAdDto createAdDto);
+    public List<AdCommentDto> getComments(Long adPk);
 
-    public void getComments(String adPk);
-
-    public void addComments(String adPk);
+    public AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto);
 
     public FullAdDto getFullAd(Long id);
 
     public void removeAds(Long id);
 
-    public void updateAds(Long id);
+    public AdDto updateAds(Long id, CreateAdDto createAdDto);
 
-    public void getComments(Long id, String adPk);
+    public void deleteComments(Long id, Long adPk);
 
-    public void deleteComments(Long id, String adPk);
+    public AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto) ;
 
-    public void updateComments(Long id, String adPk) ;
+    Optional<AdCommentDto> getComments(Long id, Long adPk);
 
-    public void getAdsMe(AdDto ad);
+    public List<AdDto> getAdsMe();
 }

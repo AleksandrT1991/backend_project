@@ -5,7 +5,6 @@ CREATE TABLE ads
 (
     id                INTEGER,
     pk                BIGSERIAL PRIMARY KEY,
-    file              TEXT,
     price             INTEGER,
     title             TEXT,
     description       TEXT,
@@ -13,7 +12,8 @@ CREATE TABLE ads
     author_first_name TEXT,
     author_last_name  TEXT,
     email             TEXT,
-    image             TEXT
+    image             TEXT,
+    author            INTEGER
 );
 
 CREATE TABLE users
@@ -49,8 +49,9 @@ CREATE TABLE ad_comments
 (
     author     INTEGER REFERENCES users (id),
     created_ad TEXT,
-    pk         INTEGER PRIMARY KEY,
-    text       TEXT
+    pk         INTEGER REFERENCES ads (pk),
+    text       TEXT,
+    id         BIGSERIAL PRIMARY KEY
 );
 
 
