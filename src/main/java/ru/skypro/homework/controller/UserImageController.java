@@ -21,13 +21,13 @@ public class UserImageController {
 
 
 
-    @PatchMapping(value = "/{id}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{userId}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@PathVariable Long userId,
-                                                  @RequestParam MultipartFile userImage) throws IOException {
-        if (userImage.getSize() > 1024 * 300) {
+                                                  @RequestParam MultipartFile file) throws IOException {
+        if (file.getSize() > 1024 * 300) {
             return ResponseEntity.badRequest().body("File is too big");
         }
-        userImageService.uploadPhoto(userId, userImage);
+        userImageService.uploadPhoto(userId, file);
         return ResponseEntity.ok().build();
     }
 

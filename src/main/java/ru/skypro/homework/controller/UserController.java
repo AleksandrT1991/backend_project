@@ -55,13 +55,13 @@ public class UserController {
 //        userService.setPassword(currentPassword,newPassword);
     }
 
-    @PatchMapping(value = "/me/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/me/{id}/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@PathVariable Long id,
-                                                  @RequestParam MultipartFile userImage) throws Exception {
-        if (userImage.getSize() > 1024 * 300) {
+                                                  @RequestParam MultipartFile file) throws Exception {
+        if (file.getSize() > 1024 * 300) {
             ResponseEntity.badRequest().body("File is to big");
         }
-        userService.updateUserImage(id, userImage);
+        userService.updateUserImage(id, file);
         return ResponseEntity.ok().build();
     }
 

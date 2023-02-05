@@ -17,8 +17,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
+import static io.swagger.v3.core.util.AnnotationsUtils.getExtensions;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
@@ -37,7 +39,8 @@ public class UserImageServiceImpl implements UserImageService {
     @Override
     public void uploadPhoto(Long userId, MultipartFile file) throws IOException {
         Optional<User> user = userService.findUser(userId);
-        Path filePath = Path.of(imageDir, userId + "." + getExtension(file.getOriginalFilename()));
+        Path filePath = Path.of(imageDir, userId + "." + getExtensions(file.getOriginalFilename()));
+        Files.createDirectories(filePath.getParent());
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -55,6 +58,10 @@ public class UserImageServiceImpl implements UserImageService {
         userImage.setMediaType(file.getContentType());
 
         userImageRepository.save(userImage);
+    }
+
+    private String getExtensions(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     public UserImage findUserImage(Long userId) {

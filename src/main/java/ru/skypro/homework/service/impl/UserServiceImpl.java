@@ -14,8 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import static java.nio.file.Files.createDirectories;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
@@ -75,9 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserImage(Long id, MultipartFile file) throws IOException {
-        Optional<User> user = userRepository.findById(id);
-        Path filePath = Path.of(imageDir, id + "." + getExtensions(file.getOriginalFilename()));
-        Files.createDirectories(filePath.getParent());
+//        Optional<User> user = userRepository.findById(id);
+        Path filePath = Path.of(imageDir,  file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = file.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
@@ -89,11 +91,14 @@ public class UserServiceImpl implements UserService {
         UserImage userImage = userImageRepository.findByUserId(id);
         userImage.setUserId(id);
         userImage.setFilePath(filePath.toString());
-        userImage.setFileSize(userImage.getFileSize());
-        userImage.setMediaType(userImage.getMediaType());
+        userImage.setFileSize(file.getSize());
+        userImage.setMediaType(file.getContentType());
         userImageRepository.save(userImage);
     }
-    private String getExtensions(String fileName) {
+//    private String getExtensions(String fileName) {
+//        return fileName.substring(fileName.lastIndexOf(".") + 1);
+//    }
+    private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 //    @Override
