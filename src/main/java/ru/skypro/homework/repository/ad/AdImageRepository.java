@@ -8,5 +8,5 @@ import ru.skypro.homework.entity.UserImage;
 
 @Repository
 public interface AdImageRepository extends JpaRepository<AdImage, Long> {
-    AdImage findByAdId(Long adId);
+    AdImage findByAdPk(Long adPk);
 }

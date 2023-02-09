@@ -9,22 +9,24 @@ import javax.persistence.*;
 @Data
 @Table(name = "ad_comments")
 public class AdComment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "author")
-    private Long author;
+    @Column(name = "user_id")
+    private Long user;
 
-    @Column(name = "created_ad")
+    @Column(name = "created_at")
     @Type(type = "org.hibernate.type.TextType")
-    private String createdAd;
+    private String createdAt;
 
-    @JoinColumn(name = "pk")
+    @Column(name = "pk")
     private Long pk;
 
     @Column(name = "text")
     @Type(type = "org.hibernate.type.TextType")
     private String text;
+
 }

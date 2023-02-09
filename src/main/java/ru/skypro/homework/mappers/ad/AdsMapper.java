@@ -14,9 +14,12 @@ import ru.skypro.homework.entity.Ad;
 )
 public interface AdsMapper {
 
+
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
+    @Mapping(target = "author", source = "user")
     AdDto toDto(Ad ad);
 
+    @Mapping(target = "user", source = "author")
     Ad toEntity(AdDto adDto);
 }

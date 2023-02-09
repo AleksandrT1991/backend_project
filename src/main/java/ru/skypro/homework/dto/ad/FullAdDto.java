@@ -1,19 +1,20 @@
 package ru.skypro.homework.dto.ad;
 
 import lombok.Data;
+import ru.skypro.homework.entity.AdImage;
 
 import java.util.List;
 
 @Data
 public class FullAdDto {
 
-    String authorFirstName;
-    String authorLastName;
-    String description;
-    String email;
-    List<String> image;
-    String phone;
-    Long pk;
-    Long price;
-    String title;
+    private String authorFirstName;
+    private String authorLastName;
+    private String description;
+    private String email;
+    private AdImage image;
+    private String phone;
+    private Long pk;
+    private Long price;
+    private String title;
 }

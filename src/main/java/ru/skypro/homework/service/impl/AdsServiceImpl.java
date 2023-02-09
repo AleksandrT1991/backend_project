@@ -8,12 +8,14 @@ import ru.skypro.homework.dto.ad.CreateAdDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdComment;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mappers.ad.AdCommentMapper;
 import ru.skypro.homework.mappers.ad.AdsMapper;
 import ru.skypro.homework.mappers.ad.CreateAdsMapper;
 import ru.skypro.homework.mappers.ad.FullAdMapper;
 import ru.skypro.homework.repository.ad.AdCommentRepository;
 import ru.skypro.homework.repository.ad.AdRepository;
+import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
@@ -27,12 +29,15 @@ public class AdsServiceImpl implements AdsService {
     private final AdRepository adRepository;
     private final AdCommentRepository adCommentRepository;
     private final AdsMapper adsMapper;
+    private final UserRepository userRepository;
 
     public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository,
-                          AdsMapper adsMapper) {
+                          AdsMapper adsMapper,
+                          UserRepository userRepository) {
         this.adRepository = adRepository;
         this.adCommentRepository = adCommentRepository;
         this.adsMapper = adsMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -58,20 +63,13 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto) {
+        List<AdComment> adComments = adCommentRepository.findAllByPk(adPk);
         AdComment byPk = new AdComment();
-        byPk.setPk(adCommentDto.getPk());
         byPk.setText(adCommentDto.getText());
-        byPk.setAuthor(adCommentDto.getAuthor());
-        byPk.setCreatedAd(adCommentDto.getCreatedAt());
+        byPk.setUser(adCommentDto.getAuthor());
+        byPk.setPk(adPk);
+        byPk.setCreatedAt(adCommentDto.getCreatedAt());
         return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byPk));
-    }
-
-//    public List<AdComment> getComments(String adPk) {
-//        Ad ad = adRepository.findByPk(adPk);
-//    }
-
-    public void addComments(String adPk) {
-        
     }
 
     public FullAdDto getFullAd(Long id) {
@@ -99,10 +97,10 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto) {
         Optional<AdComment> byIdAndPk = adCommentRepository.findByIdAndPk(id, adPk);
-        byIdAndPk.get().setAuthor(adCommentDto.getAuthor());
+        byIdAndPk.get().setUser(adCommentDto.getAuthor());
         byIdAndPk.get().setText(adCommentDto.getText());
-        byIdAndPk.get().setCreatedAd(adCommentDto.getCreatedAt());
-        byIdAndPk.get().setPk(adCommentDto.getPk());
+        byIdAndPk.get().setCreatedAt(adCommentDto.getCreatedAt());
+        byIdAndPk.get().setPk(adPk);
         return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byIdAndPk.get()));
     }
 
@@ -114,7 +112,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public List<AdDto> getAdsMe() {
         Long userId = 1L;
-        return adRepository.findAllByAuthor(userId).stream().map(AdsMapper.INSTANCE::toDto).collect(Collectors.toList());
+        return adRepository.findAllByUser_Id(userId).stream().map(AdsMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 
     public void getAdsMe(AdDto ad) {

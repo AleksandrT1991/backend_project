@@ -85,8 +85,7 @@ Content-Type: application/json
 {
   "description": "test ad desc",
   "price": 1000,
-  "title": "test ad title",
-  "author": 1
+  "title": "test ad title"
 }
 
 --WebAppBoundary

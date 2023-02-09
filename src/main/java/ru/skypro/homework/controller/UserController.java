@@ -25,13 +25,12 @@ public class UserController {
     private final UserService userService;
 
     /**
-     *
-     * @param user
+     * @param userDto
      * @return
      */
-    @PatchMapping("/me/updateUser")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        Optional<User> result = userService.updateUser(user);
+    @PatchMapping("/me")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        Optional<UserDto> result = userService.updateUser(userDto);
         if (result.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -39,12 +38,11 @@ public class UserController {
     }
 
     /**
-     *
      * @return
      */
-    @GetMapping("/me/getUser")
-        public List<User> getUser() {
-        return userService.getAllUser();
+    @GetMapping("/me")
+    public UserDto getUser() {
+        return userService.getUser();
     }
 
 
@@ -53,13 +51,12 @@ public class UserController {
         userService.setPassword(passwordDto);
     }
 
-    @PatchMapping(value = "/me/{id}/image updateUserImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateUserImage(@PathVariable Long id,
-                                                  @RequestParam MultipartFile file) throws Exception {
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateUserImage(@RequestParam MultipartFile file) throws Exception {
         if (file.getSize() > 1024 * 300) {
             ResponseEntity.badRequest().body("File is to big");
         }
-        userService.updateUserImage(id, file);
+        userService.updateUserImage(file);
         return ResponseEntity.ok().build();
     }
 
@@ -90,3 +87,4 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 }
+

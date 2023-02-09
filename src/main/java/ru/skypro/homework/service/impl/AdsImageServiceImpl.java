@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.repository.ad.AdImageRepository;
 import ru.skypro.homework.repository.ad.AdRepository;
@@ -29,7 +30,7 @@ public class AdsImageServiceImpl implements AdsImageService {
     private final AdImageRepository adImageRepository;
     private final AdRepository adRepository;
 
-    @Value("")
+    @Value("${ad.image.dir.path}")
     private String imageDir;
 
     public AdsImageServiceImpl(AdImageRepository adImageRepository, AdRepository adRepository) {
@@ -37,38 +38,17 @@ public class AdsImageServiceImpl implements AdsImageService {
         this.adRepository = adRepository;
     }
 
-    public void uploadPhoto(Long adId, MultipartFile file) throws IOException {
-
-    }
-
-    public AdImage findAdImage(Long adId) {
-        Optional<AdImage> userImageByUserId = Optional.ofNullable(adImageRepository.findByAdId(adId));
-        return userImageByUserId.orElse(new AdImage());
+    public AdImage findAdImage(Long adPk) {
+        Optional<AdImage> adImage = Optional.ofNullable(adImageRepository.findByAdPk(adPk));
+        return adImage.orElse(new AdImage());
     }
 
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    private byte[] generateImagePreview(Path filePath) throws IOException {
-        try (InputStream is = Files.newInputStream(filePath);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            BufferedImage image = ImageIO.read(bis);
-
-            int height = image.getHeight() / (image.getWidth() / 100);
-            BufferedImage preview = new BufferedImage(100, height, image.getType());
-            Graphics2D graphics = preview.createGraphics();
-            graphics.drawImage(image, 0, 0, 100, height, null);
-
-            ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
-            return baos.toByteArray();
-        }
-    }
-
     @Override
     public void updateAdsImage(Long id, MultipartFile file) throws IOException {
-        //Optional<Ad> ad = adRepository.findAdById(id);
 
         Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
@@ -83,7 +63,6 @@ public class AdsImageServiceImpl implements AdsImageService {
         }
 
         AdImage adImage = findAdImage(id);
-        //adImage.setAdId(ad.get().getId());
         adImage.setFilePath(filePath.toString());
         adImage.setFileSize(file.getSize());
         adImage.setMediaType(file.getContentType());

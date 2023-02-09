@@ -13,9 +13,7 @@ public interface AdRepository extends JpaRepository<Ad, Long> {
 
     Ad findByPk(Long pk);
 
-    Optional<Ad> findAdById(Long adId);
-
     void deleteAdByPk(Long pk);
 
-    List<Ad> findAllByAuthor(Long author);
+    List<Ad> findAllByUser_Id(Long author);
 }

@@ -52,7 +52,7 @@ public class UserImageServiceImpl implements UserImageService {
             bis.transferTo(bos);
         }
         UserImage userImage = findUserImage(userId);
-        userImage.setUserId(userId);
+        userImage.setUser(user.orElse(new User()));
         userImage.setFilePath(filePath.toString());
         userImage.setFileSize(file.getSize());
         userImage.setMediaType(file.getContentType());

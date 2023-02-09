@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.PasswordDto;
+import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
+import ru.skypro.homework.mappers.user.UserMapper;
 import ru.skypro.homework.repository.user.UserImageRepository;
 import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -13,7 +15,6 @@ import ru.skypro.homework.service.UserService;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userImageRepository = userImageRepository;
     }
+
     @Value("${user.image.dir.path}")
     private String imageDir;
 
@@ -38,16 +40,18 @@ public class UserServiceImpl implements UserService {
     public User addUser(User user) {
         return userRepository.save(user);
     }
+
     @Override
-    public List<User> getAllUser (){
+    public List<User> getAllUser() {
         return userRepository.findAll();
     }
+
     @Override
-    public Optional<User> findUser(Long userId){
+    public Optional<User> findUser(Long userId) {
         return userRepository.findUserById(userId);
     }
 
-//    @Override
+    //    @Override
 //    public Optional<User> deleteUser(String userName) {
 //        Optional<User> optional = userRepository.findByUserName(userName);
 //        userRepository.deleteByUserName(userName);
@@ -56,7 +60,7 @@ public class UserServiceImpl implements UserService {
 //    }
     @Override
     public void deleteByUserName(String userName) {
-        userRepository.deleteByUserName(userName);
+        userRepository.deleteByUsername(userName);
 
     }
 
@@ -66,20 +70,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
+    public Optional<UserDto> updateUser(UserDto userDto) {
+        User user = UserMapper.INSTANCE.toEntity(userDto);
         Optional<User> optional = userRepository.findById(user.getId());
         if (!optional.isPresent()) {
             return Optional.empty();
         } else {
             user.setId(optional.get().getId());
-            return Optional.of(userRepository.save(user));
+            return Optional.of(UserMapper.INSTANCE.toDto(userRepository.save(user)));
         }
     }
 
     @Override
-    public void updateUserImage(Long id, MultipartFile file) throws IOException {
-//        Optional<User> user = userRepository.findById(id);
-        Path filePath = Path.of(imageDir,  file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+    public void updateUserImage(MultipartFile file) throws IOException {
+        Optional<User> user = userRepository.findById(1L);
+        Path filePath = Path.of(imageDir, file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
         createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (InputStream is = file.getInputStream();
@@ -90,7 +95,7 @@ public class UserServiceImpl implements UserService {
             bis.transferTo(bos);
         }
         UserImage userImage = new UserImage();
-        userImage.setUserId(id);
+        userImage.setUser(user.orElse(new User()));
         userImage.setFilePath(filePath.toString());
         userImage.setFileSize(file.getSize());
         userImage.setMediaType(file.getContentType());
@@ -105,6 +110,14 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
         return passwordDto;
+    }
+
+    @Override
+    public UserDto getUser() {
+        Long userId = 1L;
+        return UserMapper.INSTANCE.toDto(
+                userRepository.findUserById(userId)
+                        .orElseThrow(RuntimeException::new));
     }
 
     //    private String getExtensions(String fileName) {
