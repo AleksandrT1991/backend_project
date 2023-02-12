@@ -48,13 +48,13 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     @Override
-    public void updateAdsImage(Long id, MultipartFile file) throws IOException {
+    public void updateAdsImage(Long id, MultipartFile image) throws IOException {
 
-        Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
-        try (InputStream is = file.getInputStream();
+        try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
@@ -64,19 +64,19 @@ public class AdsImageServiceImpl implements AdsImageService {
 
         AdImage adImage = findAdImage(id);
         adImage.setFilePath(filePath.toString());
-        adImage.setFileSize(file.getSize());
-        adImage.setMediaType(file.getContentType());
+        adImage.setFileSize(image.getSize());
+        adImage.setMediaType(image.getContentType());
 
         adImageRepository.save(adImage);
     }
 
     @Override
-    public void createImage(MultipartFile file) throws IOException {
-        Path filePath = Path.of(imageDir,  file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+    public void createImage(MultipartFile image) throws IOException {
+        Path filePath = Path.of(imageDir,  image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
-        try (InputStream is = file.getInputStream();
+        try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
@@ -85,8 +85,8 @@ public class AdsImageServiceImpl implements AdsImageService {
         }
         AdImage adImage = new AdImage();
         adImage.setFilePath(filePath.toString());
-        adImage.setFileSize(file.getSize());
-        adImage.setMediaType(file.getContentType());
+        adImage.setFileSize(image.getSize());
+        adImage.setMediaType(image.getContentType());
 
         adImageRepository.save(adImage);
     }

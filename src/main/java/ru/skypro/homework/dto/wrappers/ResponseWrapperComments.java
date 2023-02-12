@@ -2,13 +2,12 @@ package ru.skypro.homework.dto.wrappers;
 
 import lombok.Data;
 import ru.skypro.homework.dto.ad.AdCommentDto;
-import ru.skypro.homework.dto.ad.AdDto;
 
 import java.util.List;
 
 @Data
-public class ResponseWrapperComment {
+public class ResponseWrapperComments {
 
-    Integer count;
-    List<AdCommentDto> results;
+    private Integer count;
+    private List<AdCommentDto> results;
 }

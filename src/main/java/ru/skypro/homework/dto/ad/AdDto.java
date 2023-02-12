@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class AdDto {
 
-    private User author;
-    private AdImage image;
+    private Long author;
+    private String image;
     private Long pk;
     private Integer price;
     private String title;

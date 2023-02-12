@@ -35,9 +35,9 @@ public class Ad {
     @Type(type = "org.hibernate.type.TextType")
     private String email;
 
+    @OneToMany(fetch = FetchType.LAZY)
     @Column(name = "image")
-    @Type(type = "org.hibernate.type.TextType")
-    private AdImage image;
+    private List<AdImage> image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

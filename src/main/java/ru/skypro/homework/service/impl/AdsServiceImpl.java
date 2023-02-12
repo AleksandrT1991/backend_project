@@ -6,6 +6,8 @@ import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.CreateAdDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdComment;
 import ru.skypro.homework.entity.User;
@@ -18,6 +20,7 @@ import ru.skypro.homework.repository.ad.AdRepository;
 import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +44,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<AdDto> getAds() {
-        return adRepository.findAll().stream().map(adsMapper::toDto).collect(Collectors.toList());
+    public ResponseWrapperAds getAds() {
+        List<AdDto> ads = adRepository.findAll().stream().map(adsMapper::toDto).collect(Collectors.toList());
+        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
+        responseWrapperAds.setCount(ads.size());
+        responseWrapperAds.setResults(ads);
+        return responseWrapperAds;
     }
 
     public void addAd(AdDto ad) {
@@ -57,16 +64,24 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<AdCommentDto> getComments(Long adPk) {
-        return adCommentRepository.findAllByPk(adPk).stream().map(AdCommentMapper.INSTANCE::toDto).collect(Collectors.toList());
+    public ResponseWrapperComments getComments(Long adPk) {
+        List<AdCommentDto> comments = adCommentRepository.findAllByPk(adPk).stream().map(AdCommentMapper.INSTANCE::toDto).collect(Collectors.toList());
+        ResponseWrapperComments responseWrapperComments = new ResponseWrapperComments();
+        responseWrapperComments.setCount(comments.size());
+        responseWrapperComments.setResults(comments);
+        return responseWrapperComments;
     }
 
     @Override
     public AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto) {
         List<AdComment> adComments = adCommentRepository.findAllByPk(adPk);
+        User user = new User();
+        user.setId(adCommentDto.getAuthor());
+
         AdComment byPk = new AdComment();
+
         byPk.setText(adCommentDto.getText());
-        byPk.setUser(adCommentDto.getAuthor());
+        byPk.setUser(user);
         byPk.setPk(adPk);
         byPk.setCreatedAt(adCommentDto.getCreatedAt());
         return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byPk));
@@ -96,12 +111,19 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto) {
-        Optional<AdComment> byIdAndPk = adCommentRepository.findByIdAndPk(id, adPk);
-        byIdAndPk.get().setUser(adCommentDto.getAuthor());
-        byIdAndPk.get().setText(adCommentDto.getText());
-        byIdAndPk.get().setCreatedAt(adCommentDto.getCreatedAt());
-        byIdAndPk.get().setPk(adPk);
-        return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byIdAndPk.get()));
+        Optional<AdComment> byIdAndPk = Optional.ofNullable(adCommentRepository.findByIdAndPk(id, adPk)).orElseThrow(EntityNotFoundException::new);
+        if (byIdAndPk.isPresent()) {
+            User user = new User();
+            user.setId(adCommentDto.getAuthor());
+
+            byIdAndPk.get().setUser(user);
+            byIdAndPk.get().setText(adCommentDto.getText());
+            byIdAndPk.get().setCreatedAt(adCommentDto.getCreatedAt());
+            byIdAndPk.get().setPk(adPk);
+
+            return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byIdAndPk.get()));
+        } else
+            return null;
     }
 
     @Override
@@ -110,12 +132,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<AdDto> getAdsMe() {
+    public ResponseWrapperAds getAdsMe() {
         Long userId = 1L;
-        return adRepository.findAllByUser_Id(userId).stream().map(AdsMapper.INSTANCE::toDto).collect(Collectors.toList());
-    }
-
-    public void getAdsMe(AdDto ad) {
-        
+        List<AdDto> ads = adRepository.findAllByUser_Id(userId).stream().map(AdsMapper.INSTANCE::toDto).collect(Collectors.toList());
+        ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
+        responseWrapperAds.setCount(ads.size());
+        responseWrapperAds.setResults(ads);
+        return responseWrapperAds;
     }
 }

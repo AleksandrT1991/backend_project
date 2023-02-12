@@ -12,7 +12,7 @@ public class FullAdDto {
     private String authorLastName;
     private String description;
     private String email;
-    private AdImage image;
+    private String image;
     private String phone;
     private Long pk;
     private Long price;

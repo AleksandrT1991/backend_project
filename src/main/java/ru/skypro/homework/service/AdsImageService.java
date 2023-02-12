@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface AdsImageService {
 
-    void updateAdsImage(Long id, MultipartFile file) throws IOException;
+    void updateAdsImage(Long id, MultipartFile image) throws IOException;
     void createImage(MultipartFile file) throws IOException;
 }

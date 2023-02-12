@@ -11,9 +11,9 @@ import ru.skypro.homework.entity.AdComment;
 public interface AdCommentMapper {
 
     AdCommentMapper INSTANCE = Mappers.getMapper(AdCommentMapper.class);
-    @Mapping(target = "author", source = "user")
+    @Mapping(target = "author", source = "user.id")
     AdCommentDto toDto(AdComment adComment);
 
-    @Mapping(target = "user", source = "author")
+    @Mapping(target = "user.id", source = "author")
     AdComment toEntity(AdCommentDto adCommentDto);
 }

@@ -9,7 +9,8 @@ CREATE TABLE users
     first_name TEXT,
     email      TEXT,
     username   TEXT,
-    password   TEXT
+    password   TEXT,
+    image      TEXT
 );
 
 CREATE TABLE user_images

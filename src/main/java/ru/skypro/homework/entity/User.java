@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,5 +39,9 @@ public class User {
     @Column(name = "password")
     @Type(type = "org.hibernate.type.TextType")
     private String password;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image")
+    private UserImage image;
 
 }

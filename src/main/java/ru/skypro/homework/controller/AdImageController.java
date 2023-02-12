@@ -17,7 +17,7 @@ public class AdImageController {
     private final AdsImageService adsImageService;
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateAdsImage(@PathVariable Long id, @RequestParam MultipartFile file) throws IOException {
-        adsImageService.updateAdsImage(id, file);
+    public void updateAdsImage(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
+        adsImageService.updateAdsImage(id, image);
     }
 }

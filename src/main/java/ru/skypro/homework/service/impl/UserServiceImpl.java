@@ -12,6 +12,7 @@ import ru.skypro.homework.repository.user.UserImageRepository;
 import ru.skypro.homework.repository.user.UserRepository;
 import ru.skypro.homework.service.UserService;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,13 +52,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserById(userId);
     }
 
-    //    @Override
-//    public Optional<User> deleteUser(String userName) {
-//        Optional<User> optional = userRepository.findByUserName(userName);
-//        userRepository.deleteByUserName(userName);
-//        return  optional;
-//
-//    }
     @Override
     public void deleteByUserName(String userName) {
         userRepository.deleteByUsername(userName);
@@ -104,10 +98,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PasswordDto setPassword(PasswordDto passwordDto) {
-        User user = userRepository.findUserById(1L).get();
-        if (passwordDto.getCurrentPassword().equals(user.getPassword())) {
-            user.setPassword(passwordDto.getNewPassword());
-            userRepository.save(user);
+        Long userId = 1L;
+        Optional<User> user = Optional.ofNullable(userRepository.findUserById(userId).orElseThrow(() -> new EntityNotFoundException()));
+        if (user.isPresent()) {
+            if (passwordDto.getCurrentPassword().equals(user.get().getPassword())) {
+                user.get().setPassword(passwordDto.getNewPassword());
+                userRepository.save(user.get());
+            }
         }
         return passwordDto;
     }

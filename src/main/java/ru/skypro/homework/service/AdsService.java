@@ -4,17 +4,19 @@ import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.CreateAdDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AdsService {
 
-    public List<AdDto> getAds();
+    public ResponseWrapperAds getAds();
 
     public AdDto createAdd(CreateAdDto createAdDto);
 
-    public List<AdCommentDto> getComments(Long adPk);
+    public ResponseWrapperComments getComments(Long adPk);
 
     public AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto);
 
@@ -30,5 +32,5 @@ public interface AdsService {
 
     Optional<AdCommentDto> getComments(Long id, Long adPk);
 
-    public List<AdDto> getAdsMe();
+    public ResponseWrapperAds getAdsMe();
 }

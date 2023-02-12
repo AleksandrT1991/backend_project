@@ -14,6 +14,8 @@ import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.CreateAdDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
+import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.service.AdsImageService;
 import ru.skypro.homework.service.AdsService;
@@ -27,16 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Объявления")
 public class AdController {
-
-    //TODO: кастомные ошибки
-    //TODO: логирование
-    //TODO: тесты
-    //TODO: возврат респонсов
-    //TODO: опшеналы
-    //TODO: сваггер
-    //TODO: java-docs
-    //TODO: аутентификация
-    //TODO: работа с фронтом
 
     private final AdsService adsService;
     private final AdsImageService adsImageService;
@@ -54,7 +46,7 @@ public class AdController {
             }
     )
     @GetMapping
-    public List<AdDto> getAds() {
+    public ResponseWrapperAds getAds() {
         return adsService.getAds();
     }
 
@@ -179,7 +171,7 @@ public class AdController {
             }
     )
     @GetMapping("/me")
-    public List<AdDto> getAdsMe(
+    public ResponseWrapperAds getAdsMe(
                             @RequestHeader Boolean authenticated,
                             @RequestHeader List<String> authorities,
                             @RequestHeader String details,
@@ -210,7 +202,7 @@ public class AdController {
             }
     )
     @GetMapping("/{adPk}/comments")
-    public List<AdCommentDto> getComments(@PathVariable Long adPk) {
+    public ResponseWrapperComments getComments(@PathVariable Long adPk) {
         return adsService.getComments(adPk);
     }
 
