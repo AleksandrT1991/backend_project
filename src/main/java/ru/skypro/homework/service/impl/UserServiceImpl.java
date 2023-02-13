@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserImageRepository userImageRepository;
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, UserImageRepository userImageRepository) {
         this.userRepository = userRepository;
@@ -37,8 +43,16 @@ public class UserServiceImpl implements UserService {
     @Value("${user.image.dir.path}")
     private String imageDir;
 
+    /**
+     * event recording process
+     * @param passwordDto
+     * we take the user's password from the data badly and compare it with the current one, if the passwords match, change the password
+     * @return passwordDto
+     * @throws CredentialNotFoundException
+     */
     @Override
     public PasswordDto setPassword(PasswordDto passwordDto) throws CredentialNotFoundException {
+        logger.info("Metod\"UserServiceImpl.setPassword()\" was called");
         Long userId = 1L;
         Optional<User> user = Optional.ofNullable(userRepository.findUserById(userId).orElseThrow(EntityNotFoundException::new));
         if (user.isPresent()) {
@@ -52,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser() {
+        logger.info("Metod\"UserServiceImpl.getUser()\" was called");
         Long userId = 1L;
         return UserMapper.INSTANCE.toDto(
                 userRepository.findUserById(userId)
@@ -60,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> updateUser(UserDto userDto) {
+        logger.info("Metod\"UserServiceImpl.updateUser()\" was called");
         User user = UserMapper.INSTANCE.toEntity(userDto);
         Optional<User> optional = userRepository.findById(user.getId());
         if (!optional.isPresent()) {
@@ -72,6 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserImage(MultipartFile file) throws IOException {
+        logger.info("Metod\"UserServiceImpl.updateUserImage()\" was called");
         Long userId = 1L;
         Optional<User> user = userRepository.findById(userId);
         Path filePath = Path.of(imageDir, file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
@@ -93,6 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private String getExtension(String fileName) {
+        logger.info("Metod\"UserServiceImpl.getExtension()\" was called");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

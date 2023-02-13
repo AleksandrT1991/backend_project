@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
@@ -36,9 +38,14 @@ public class AdsServiceImpl implements AdsService {
         this.adCommentRepository = adCommentRepository;
         this.adImageRepository = adImageRepository;
     }
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
 
     @Override
     public ResponseWrapperAds getAds() {
+        logger.info("Metod\"AdsServiceImpl.getAds()\" was called");
         List<AdDto> ads = adRepository.findAll().stream().map(a->AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         responseWrapperAds.setCount(ads.size());
@@ -48,6 +55,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdDto createAd(CreateAdsDto createAdsDto) {
+        logger.info("Metod\"AdsServiceImpl.createAd()\" was called");
         return AdsMapper.INSTANCE.toDto(
                 adRepository.save(
                         CreateAdsMapper.INSTANCE.toEntity(createAdsDto)));
@@ -55,6 +63,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperComments getComments(Long adPk) {
+        logger.info("Metod\"AdsServiceImpl.getComments()\" was called");
         List<AdCommentDto> comments = adCommentRepository.findAllByPk(adPk).stream().map(AdCommentMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
         ResponseWrapperComments responseWrapperComments = new ResponseWrapperComments();
@@ -65,6 +74,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto) {
+        logger.info("Metod\"AdsServiceImpl.addComments()\" was called");
         List<AdComment> adComments = adCommentRepository.findAllByPk(adPk);
         User user = new User();
         user.setId(adCommentDto.getAuthor());
@@ -80,12 +90,14 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public FullAdDto getFullAd(Long id) {
+        logger.info("Metod\"AdsServiceImpl.getFullAd()\" was called");
         return FullAdMapper.INSTANCE.toDto(
                 adRepository.findByPk(id));
     }
 
     @Override
     public void removeAds(Long pk) {
+        logger.info("Metod\"AdsServiceImpl.removeAds()\" was called");
         adImageRepository.deleteAdImageByAdPk_Pk(pk);
         adCommentRepository.deleteAdCommentByPk(pk);
         adRepository.deleteAdByPk(pk);
@@ -93,6 +105,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdDto updateAds(Long id, CreateAdsDto createAdsDto) {
+        logger.info("Metod\"AdsServiceImpl.updateAds()\" was called");
         Ad byPk = adRepository.findByPk(id);
         byPk.setDescription(createAdsDto.getDescription());
         byPk.setPrice(createAdsDto.getPrice());
@@ -102,16 +115,19 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdCommentDto getComments(Long id, Long adPk) {
+        logger.info("Metod\"AdsServiceImpl.getComments()\" was called");
         return AdCommentMapper.INSTANCE.toDto(adCommentRepository.findByIdAndPk(id, adPk).orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
     public void deleteComments(Long id, Long adPk) {
+        logger.info("Metod\"AdsServiceImpl.deleteComments()\" was called");
         adCommentRepository.deleteByIdAndPk(id, adPk);
     }
 
     @Override
     public AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto) {
+        logger.info("Metod\"AdsServiceImpl.updateComments()\" was called");
         Optional<AdComment> byIdAndPk = Optional.ofNullable(adCommentRepository.findByIdAndPk(id, adPk)).orElseThrow(EntityNotFoundException::new);
         if (byIdAndPk.isPresent()) {
             User user = new User();
@@ -129,6 +145,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAdsMe() {
+        logger.info("Metod\"AdsServiceImpl.getAdsMe()\" was called");
         Long userId = 1L;
         List<AdDto> ads = adRepository.findAllByUser_Id(userId).stream().map(a-> AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
@@ -136,6 +153,4 @@ public class AdsServiceImpl implements AdsService {
         responseWrapperAds.setResults(ads);
         return responseWrapperAds;
     }
-
-
 }
