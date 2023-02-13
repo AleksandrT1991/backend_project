@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,10 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Operation(
             summary = "setPassword",
@@ -49,6 +55,7 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public PasswordDto setPassword(@RequestBody PasswordDto passwordDto) throws CredentialNotFoundException {
+        logger.info("Controller\"UserController.setPassword()\" was called");
         return userService.setPassword(passwordDto);
     }
 
@@ -75,6 +82,7 @@ public class UserController {
     )
     @GetMapping("/me")
     public UserDto getUser() {
+        logger.info("Controller\"UserController.getUser()\" was called");
         return userService.getUser();
     }
 
@@ -104,6 +112,7 @@ public class UserController {
     )
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        logger.info("Controller\"UserController.updateUser()\" was called");
         Optional<UserDto> result = userService.updateUser(userDto);
         if (result.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -124,6 +133,7 @@ public class UserController {
     )
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@RequestParam MultipartFile image) throws Exception {
+        logger.info("Controller\"UserController.updateUserImage()\" was called");
         if (image.getSize() > 1024 * 300) {
             ResponseEntity.badRequest().body("File is to big");
         }

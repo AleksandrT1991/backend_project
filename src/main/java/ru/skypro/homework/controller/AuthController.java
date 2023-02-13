@@ -2,6 +2,8 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,9 +24,14 @@ import static ru.skypro.homework.dto.enums.Role.USER;
 public class AuthController {
 
     private final AuthService authService;
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
     public ResponseEntity<LoginReq> login(@RequestBody LoginReq req) {
+        logger.info("Controller\"AuthController.login()\" was called");
         if (authService.login(req.getUsername(), req.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -34,6 +41,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterReq> register(@RequestBody RegisterReq req) {
+        logger.info("Controller\"AuthController.register()\" was called");
         Role role = req.getRole() == null ? USER : req.getRole();
         if (authService.register(req, role)) {
             return ResponseEntity.ok().build();

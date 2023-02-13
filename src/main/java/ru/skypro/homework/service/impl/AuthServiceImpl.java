@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,9 +23,14 @@ public class AuthServiceImpl implements AuthService {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
     }
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Override
     public boolean login(String userName, String password) {
+        logger.info("Metod\"AuthServiceImpl.login()\" was called");
         if (!manager.userExists(userName)) {
             return false;
         }
@@ -35,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
+        logger.info("Metod\"AuthServiceImpl.register()\" was called");
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }

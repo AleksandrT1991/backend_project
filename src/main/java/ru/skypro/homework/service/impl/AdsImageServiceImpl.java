@@ -1,11 +1,12 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.repository.AdImageRepository;
-import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsImageService;
 
 import java.io.*;
@@ -24,12 +25,18 @@ public class AdsImageServiceImpl implements AdsImageService {
 
     private final AdImageRepository adImageRepository;
 
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(AdsImageServiceImpl.class);
+
     public AdsImageServiceImpl(AdImageRepository adImageRepository) {
         this.adImageRepository = adImageRepository;
     }
 
     @Override
     public void createImage(MultipartFile image) throws IOException {
+        logger.info("Metod\"AdsImageServiceImpl.createImage()\" was called");
         Path filePath = Path.of(imageDir,  image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -51,7 +58,7 @@ public class AdsImageServiceImpl implements AdsImageService {
 
     @Override
     public void updateAdsImage(Long id, MultipartFile image) throws IOException {
-
+        logger.info("Metod\"AdsImageServiceImpl.updateAdsImage()\" was called");
         Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -73,10 +80,12 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     private String getExtension(String fileName) {
+        logger.info("Metod\"AdsImageServiceImpl.getExtension()\" was called");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     public AdImage findAdImage(Long adPk) {
+        logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
         Optional<AdImage> adImage = Optional.ofNullable(adImageRepository.findByAdPk(adPk));
         return adImage.orElse(new AdImage());
     }

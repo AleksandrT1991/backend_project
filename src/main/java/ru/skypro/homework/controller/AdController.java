@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +31,10 @@ public class AdController {
 
     private final AdsService adsService;
     private final AdsImageService adsImageService;
+    /**
+     * event recording process
+     */
+    private final Logger logger = LoggerFactory.getLogger(AdController.class);
 
     @Operation(
             responses = {
@@ -43,6 +49,7 @@ public class AdController {
     )
     @GetMapping
     public ResponseWrapperAds getAds() {
+        logger.info("Controller\"AdController.getAds()\" was called");
         return adsService.getAds();
     }
 
@@ -76,6 +83,7 @@ public class AdController {
     )
     public AdDto addAd(@RequestPart(value = "properties") CreateAdsDto createAdsDto,
                        @RequestPart(value = "image") MultipartFile image) throws IOException {
+        logger.info("Controller\"AdController.addAd()\" was called");
         adsImageService.createImage(image);
         return adsService.createAd(createAdsDto);
     }
@@ -103,6 +111,7 @@ public class AdController {
     )
     @GetMapping("/{adPk}/comments")
     public ResponseWrapperComments getComments(@PathVariable Long adPk) {
+        logger.info("Controller\"AdController.getComments()\" was called");
         return adsService.getComments(adPk);
     }
 
@@ -129,6 +138,7 @@ public class AdController {
     )
     @PostMapping("/{adPk}/comments")
     public AdCommentDto addComments(@PathVariable Long adPk, @RequestBody AdCommentDto adCommentDto) {
+        logger.info("Controller\"AdController.addComments()\" was called");
         return adsService.addComments(adPk, adCommentDto);
     }
 
@@ -149,6 +159,7 @@ public class AdController {
     )
     @GetMapping("/{id}")
     public FullAdDto getFullAd(@PathVariable Long id) {
+        logger.info("Controller\"AdController.getFullAd()\" was called");
         return adsService.getFullAd(id);
     }
 
@@ -168,6 +179,7 @@ public class AdController {
     )
     @DeleteMapping("/{id}")
     public void removeAds(@PathVariable Long id) {
+        logger.info("Controller\"AdController.removeAds()\" was called");
         adsService.removeAds(id);
     }
 
@@ -194,6 +206,7 @@ public class AdController {
     )
     @PatchMapping("/{id}")
     public AdDto updateAds(@PathVariable Long id, @RequestBody CreateAdsDto adDto) {
+        logger.info("Controller\"AdController.updateAds()\" was called");
         return adsService.updateAds(id, adDto);
     }
 
@@ -219,6 +232,7 @@ public class AdController {
     )
     @GetMapping("/{adPk}/comments/{id}")
     public AdCommentDto getComments(@PathVariable Long id, @PathVariable Long adPk) {
+        logger.info("Controller\"AdController.getComments()\" was called");
         return adsService.getComments(id, adPk);
     }
 
@@ -241,6 +255,7 @@ public class AdController {
     )
     @DeleteMapping("/{adPk}/comments/{id}")
     public void deleteComments(@PathVariable Long id, @PathVariable Long adPk) {
+        logger.info("Controller\"AdController.deleteComments()\" was called");
         adsService.deleteComments(id, adPk);
     }
 
@@ -266,7 +281,9 @@ public class AdController {
             }
     )
     @PatchMapping("/{adPk}/comments/{id}")
-    public AdCommentDto updateComments(@PathVariable Long id, @PathVariable Long adPk, @RequestBody AdCommentDto adCommentDto) {
+    public AdCommentDto updateComments(@PathVariable Long id, @PathVariable Long adPk,
+                                       @RequestBody AdCommentDto adCommentDto) {
+        logger.info("Controller\"AdController.updateComments()\" was called");
         return adsService.updateComments(id, adPk, adCommentDto);
     }
 
@@ -297,6 +314,7 @@ public class AdController {
             @RequestHeader String details,
             @RequestHeader String principal
     ) {
+        logger.info("Controller\"AdController.getAdsMe()\" was called");
         return adsService.getAdsMe();
     }
 
