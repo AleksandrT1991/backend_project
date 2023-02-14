@@ -64,6 +64,10 @@ public class UserServiceImpl implements UserService {
         return passwordDto;
     }
 
+    /**
+     * event recording process
+     * @return
+     */
     @Override
     public UserDto getUser() {
         logger.info("Metod\"UserServiceImpl.getUser()\" was called");

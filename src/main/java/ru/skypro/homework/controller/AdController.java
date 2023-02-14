@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdCommentDto;
@@ -17,11 +18,13 @@ import ru.skypro.homework.dto.ad.CreateAdsDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
+import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.service.AdsImageService;
 import ru.skypro.homework.service.AdsService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/ads")
@@ -48,9 +51,14 @@ public class AdController {
             }
     )
     @GetMapping
-    public ResponseWrapperAds getAds() {
+    public ResponseEntity<ResponseWrapperAds> getAds() {
         logger.info("Controller\"AdController.getAds()\" was called");
-        return adsService.getAds();
+        Optional<ResponseWrapperAds> result = Optional.ofNullable(adsService.getAds());
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(result.get());
+        }
     }
 
     @Operation(
@@ -110,9 +118,14 @@ public class AdController {
             }
     )
     @GetMapping("/{adPk}/comments")
-    public ResponseWrapperComments getComments(@PathVariable Long adPk) {
+    public ResponseEntity<ResponseWrapperComments> getComments(@PathVariable Long adPk) {
         logger.info("Controller\"AdController.getComments()\" was called");
-        return adsService.getComments(adPk);
+        Optional<ResponseWrapperComments> result = Optional.ofNullable(adsService.getComments(adPk));
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(result.get());
+        }
     }
 
     @Operation(
@@ -158,9 +171,14 @@ public class AdController {
             }
     )
     @GetMapping("/{id}")
-    public FullAdDto getFullAd(@PathVariable Long id) {
+    public ResponseEntity<FullAdDto> getFullAd(@PathVariable Long id) {
         logger.info("Controller\"AdController.getFullAd()\" was called");
-        return adsService.getFullAd(id);
+        Optional<FullAdDto> result = Optional.ofNullable(adsService.getFullAd(id));
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(result.get());
+        }
     }
 
     @Operation(
@@ -231,9 +249,14 @@ public class AdController {
             }
     )
     @GetMapping("/{adPk}/comments/{id}")
-    public AdCommentDto getComments(@PathVariable Long id, @PathVariable Long adPk) {
+    public ResponseEntity<AdCommentDto> getComments(@PathVariable Long id, @PathVariable Long adPk) {
         logger.info("Controller\"AdController.getComments()\" was called");
-        return adsService.getComments(id, adPk);
+        Optional<AdCommentDto> result = Optional.ofNullable(adsService.getComments(id, adPk));
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(result.get());
+        }
     }
 
     @Operation(
@@ -308,14 +331,27 @@ public class AdController {
             }
     )
     @GetMapping("/me")
-    public ResponseWrapperAds getAdsMe(
+    public ResponseEntity<List<ResponseWrapperAds>> getAdsMe(
             @RequestHeader Boolean authenticated,
             @RequestHeader List<String> authorities,
+            @RequestHeader String credentials,
             @RequestHeader String details,
-            @RequestHeader String principal
-    ) {
+            @RequestHeader String principal) {
         logger.info("Controller\"AdController.getAdsMe()\" was called");
-        return adsService.getAdsMe();
+        boolean credentialsIsNotEmpty = credentials != null && !credentials.isBlank();
+        boolean detailsNotEmpty = details != null && !details.isBlank();
+        boolean principalIsNotEmpty = principal != null && !principal.isBlank();
+        if ((credentialsIsNotEmpty || detailsNotEmpty || principalIsNotEmpty || authenticated) && authorities == null) {
+            return ResponseEntity.badRequest().build();
+        } else if ((credentialsIsNotEmpty || detailsNotEmpty || principalIsNotEmpty || authenticated) && authorities != null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            Optional<ResponseWrapperAds> result = Optional.ofNullable(adsService.getAdsMe());
+            if (result.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            } else {
+                return ResponseEntity.ok(List.of(result.get()));
+            }
+        }
     }
-
 }

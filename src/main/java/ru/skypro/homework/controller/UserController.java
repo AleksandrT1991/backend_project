@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.service.UserService;
 
 import javax.security.auth.login.CredentialNotFoundException;
@@ -27,6 +28,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+
     /**
      * event recording process
      */
@@ -81,9 +83,13 @@ public class UserController {
             }
     )
     @GetMapping("/me")
-    public UserDto getUser() {
+    public ResponseEntity<UserDto> getUser() {
         logger.info("Controller\"UserController.getUser()\" was called");
-        return userService.getUser();
+        Optional<UserDto> result = Optional.ofNullable(userService.getUser());
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(result.get());
     }
 
     @Operation(
