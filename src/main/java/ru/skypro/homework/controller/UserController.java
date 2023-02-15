@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
-import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.service.UserService;
 
 import javax.security.auth.login.CredentialNotFoundException;
@@ -55,6 +55,7 @@ public class UserController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/set_password")
     public PasswordDto setPassword(@RequestBody PasswordDto passwordDto) throws CredentialNotFoundException {
         logger.info("Controller\"UserController.setPassword()\" was called");
@@ -82,6 +83,7 @@ public class UserController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser() {
         logger.info("Controller\"UserController.getUser()\" was called");
@@ -116,6 +118,7 @@ public class UserController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         logger.info("Controller\"UserController.updateUser()\" was called");
