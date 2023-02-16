@@ -32,6 +32,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+
     private final MyUser myUser;
     private final AuthService authService;
 
@@ -151,5 +152,4 @@ public class UserController {
         userService.updateUserImage(myUser.getUsername(), image);
         return ResponseEntity.ok().build();
     }
-
 }
