@@ -91,14 +91,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile file) throws IOException {
+    public void updateUserImage(MultipartFile image) throws IOException {
         logger.info("Metod\"UserServiceImpl.updateUserImage()\" was called");
         Long userId = 1L;
-        Optional<User> user = userRepository.findById(userId);
-        Path filePath = Path.of(imageDir, file.getName() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Path filePath = Path.of(imageDir, image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        try (InputStream is = file.getInputStream();
+        try (InputStream is = image.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
@@ -106,11 +106,15 @@ public class UserServiceImpl implements UserService {
             bis.transferTo(bos);
         }
         UserImage userImage = new UserImage();
-        userImage.setUser(user.orElse(new User()));
+        userImage.setUser(user);
         userImage.setFilePath(filePath.toString());
-        userImage.setFileSize(file.getSize());
-        userImage.setMediaType(file.getContentType());
-        userImageRepository.save(userImage);
+        userImage.setFileSize(image.getSize());
+        userImage.setBytea(image.getBytes());
+        userImage.setMediaType(image.getContentType());
+
+        UserImage save = userImageRepository.save(userImage);
+        user.setImage(save);
+        userRepository.save(user);
     }
 
     private String getExtension(String fileName) {

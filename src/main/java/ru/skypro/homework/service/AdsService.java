@@ -6,13 +6,14 @@ import ru.skypro.homework.dto.ad.CreateAdsDto;
 import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
+import ru.skypro.homework.entity.AdImage;
 
 import java.util.List;
 
 public interface AdsService {
     ResponseWrapperAds getAds();
 
-    AdDto createAd(CreateAdsDto createAdsDto);
+    AdDto createAd(CreateAdsDto createAdsDto, List<AdImage> imageSaved);
 
     ResponseWrapperComments getComments(Long adPk);
 
@@ -24,7 +25,7 @@ public interface AdsService {
 
     AdDto updateAds(Long id, CreateAdsDto adDto);
 
-    AdCommentDto getComments(Long id, Long adPk);
+    AdCommentDto getComments(Long adPk, Long id);
 
     void deleteComments(Long id, Long adPk);
 

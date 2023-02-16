@@ -6,9 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.service.AdsImageService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/image")
@@ -28,4 +30,13 @@ public class AdImageController {
         logger.info("Controller\"AdImageController.updateAdsImage()\" was called");
         adsImageService.updateAdsImage(id, image);
     }
+
+    @GetMapping(value = "/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public byte[] getAdsImage(@PathVariable Long id) {
+        logger.info("Controller\"AdImageController.updateAdsImage()\" was called");
+        return adsImageService.getAdsImage(id);
+    }
+
+
+
 }

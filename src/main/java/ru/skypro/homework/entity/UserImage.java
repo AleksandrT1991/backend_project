@@ -23,6 +23,11 @@ public class UserImage {
     @Type(type = "org.hibernate.type.TextType")
     private String filePath;
 
+    @Lob
+    @Column(name = "byte")
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] bytea;
+
     @Column(name = "file_size")
     private Long fileSize;
 

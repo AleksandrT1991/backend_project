@@ -6,6 +6,6 @@ import lombok.Data;
 public class CreateAdsDto {
 
     private String description;
-    private Integer price;
+    private Long price;
     private String title;
 }

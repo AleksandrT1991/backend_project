@@ -14,7 +14,7 @@ public interface AdCommentRepository extends JpaRepository<AdComment, Long> {
 
     List<AdComment> findAllByPk(Long adPk);
 
-    Optional<AdComment> findByIdAndPk(Long id, Long adPk);
+    Optional<AdComment> findByPkAndId(Long pk, Long id);
 
     void deleteByIdAndPk(Long id, Long adPk);
 

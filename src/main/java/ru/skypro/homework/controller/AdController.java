@@ -19,6 +19,7 @@ import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 import ru.skypro.homework.exception.AdsNotFoundException;
+import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.service.AdsImageService;
 import ru.skypro.homework.service.AdsService;
 
@@ -92,8 +93,8 @@ public class AdController {
     public AdDto addAd(@RequestPart(value = "properties") CreateAdsDto createAdsDto,
                        @RequestPart(value = "image") MultipartFile image) throws IOException {
         logger.info("Controller\"AdController.addAd()\" was called");
-        adsImageService.createImage(image);
-        return adsService.createAd(createAdsDto);
+        List<AdImage> imageSaved = List.of(adsImageService.createImage(image));
+        return adsService.createAd(createAdsDto, imageSaved);
     }
 
     @Operation(
@@ -251,7 +252,7 @@ public class AdController {
     @GetMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdCommentDto> getComments(@PathVariable Long id, @PathVariable Long adPk) {
         logger.info("Controller\"AdController.getComments()\" was called");
-        Optional<AdCommentDto> result = Optional.ofNullable(adsService.getComments(id, adPk));
+        Optional<AdCommentDto> result = Optional.ofNullable(adsService.getComments(adPk, id));
         if (result.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {

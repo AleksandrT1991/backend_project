@@ -5,8 +5,11 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
+import ru.skypro.homework.entity.User;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,10 +24,11 @@ public abstract class FullAdMapper {
         }
 
         FullAdDto fullAdDto = new FullAdDto();
-
+        fullAdDto.setAuthorFirstName(ad.getUser().getFirstName());
+        fullAdDto.setAuthorLastName(ad.getUser().getLastName());
         fullAdDto.setDescription( ad.getDescription() );
         fullAdDto.setEmail( ad.getEmail() );
-        fullAdDto.setImage( ad.getImage().stream().map(AdImage::getFilePath).collect(Collectors.joining(",")) );
+        fullAdDto.setImage( ad.getImage().stream().map(x->"/image/"+x.getId()).collect(Collectors.toList()) );
         fullAdDto.setPhone( ad.getPhone() );
         fullAdDto.setPk( ad.getPk() );
         if ( ad.getPrice() != null ) {
@@ -44,19 +48,23 @@ public abstract class FullAdMapper {
 
         ad.setPk( fullAdDto.getPk() );
         if ( fullAdDto.getPrice() != null ) {
-            ad.setPrice( fullAdDto.getPrice().intValue() );
+            ad.setPrice( fullAdDto.getPrice() );
         }
         ad.setTitle( fullAdDto.getTitle() );
-        ad.setDescription( fullAdDto.getDescription() );
-        ad.setPhone( fullAdDto.getPhone() );
-        ad.setEmail( fullAdDto.getEmail() );
-        List<String> paths = Stream.of(fullAdDto.getImage().split(",", -1))
-                .collect(Collectors.toList());
+        List<String> paths = fullAdDto.getImage();
 
         List<AdImage> images = paths.stream()
                 .map(path -> {
+                    Long id = null;
+                    Pattern pattern = Pattern.compile("[\\w\\W]+\\/(\\d+)");
+                    Matcher matcher = pattern.matcher(path);
+                    if (matcher.find()) {
+                        id = Long.valueOf(matcher.group(1));
+                    }
                     AdImage image = new AdImage();
-                    image.setFilePath(path);
+                    if (id!=null) {
+                        image.setId(id);
+                    }
                     return image;
                 })
                 .collect(Collectors.toList());

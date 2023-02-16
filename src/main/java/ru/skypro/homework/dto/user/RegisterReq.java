@@ -10,5 +10,4 @@ public class RegisterReq {
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
 }

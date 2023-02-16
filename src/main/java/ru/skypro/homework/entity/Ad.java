@@ -17,7 +17,7 @@ public class Ad {
     private Long pk;
 
     @Column(name = "price")
-    private Integer price;
+    private Long price;
 
     @Column(name = "title")
     @Type(type = "org.hibernate.type.TextType")

@@ -20,6 +20,7 @@ CREATE TABLE user_images
     id         BIGSERIAL PRIMARY KEY,
     user_id    BIGINT REFERENCES users (id),
     file_path  TEXT,
+    byte       BYTEA,
     file_size  BIGINT DEFAULT 0,
     media_type TEXT
 );
@@ -27,20 +28,21 @@ CREATE TABLE user_images
 CREATE TABLE ads
 (
     pk          BIGSERIAL PRIMARY KEY,
-    price       INTEGER,
+    price       BIGINT,
     title       TEXT,
     description TEXT,
     phone       TEXT,
     email       TEXT,
     image       TEXT,
-    user_id     BIGINT REFERENCES users (id)
+    user_id     BIGINT REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE ad_images
 (
     id         BIGSERIAL PRIMARY KEY,
-    ad         BIGINT REFERENCES ads (pk),
+    ad         BIGINT REFERENCES ads (pk) ON DELETE CASCADE,
     file_path  TEXT,
+    byte       BYTEA,
     file_size  BIGINT DEFAULT 0,
     media_type TEXT
 );
@@ -48,8 +50,8 @@ CREATE TABLE ad_images
 CREATE TABLE ad_comments
 (
     id         BIGSERIAL PRIMARY KEY,
-    user_id    BIGINT REFERENCES users (id),
+    user_id    BIGINT REFERENCES users (id) ON DELETE CASCADE,
     created_at TEXT,
-    pk         BIGINT REFERENCES ads (pk),
+    pk         BIGINT REFERENCES ads (pk) ON DELETE CASCADE,
     text       TEXT
 );

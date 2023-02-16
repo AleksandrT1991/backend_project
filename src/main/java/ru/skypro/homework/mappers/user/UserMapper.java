@@ -8,7 +8,6 @@ import ru.skypro.homework.entity.UserImage;
 
 @Mapper
 public abstract class UserMapper {
-    //методы будут переделаны под ссылки на картинки в поле image
     public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     public UserDto toDto(User user) {
@@ -28,6 +27,7 @@ public abstract class UserMapper {
             userDto.setPhone(user.getPhone());
             userDto.setRegDate(user.getRegDate());
             userDto.setCity(user.getCity());
+            userDto.setImage("/image/"+user.getImage().getId());
             return userDto;
         }
     }

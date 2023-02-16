@@ -8,8 +8,9 @@ import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.entity.User;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mapper
 public abstract class AdsMapper {
@@ -22,8 +23,12 @@ public abstract class AdsMapper {
         }
 
         AdDto adDto = new AdDto();
-        adDto.setAuthor(ad.getUser().getId());
-        adDto.setImage( ad.getImage().stream().map(AdImage::getFilePath).collect(Collectors.joining(",")) );
+        if (ad.getUser()!=null) {
+            adDto.setAuthor(ad.getUser().getId());
+        } else {
+            adDto.setAuthor(new User().getId());
+        }
+        adDto.setImage( ad.getImage().stream().map(x->"/image/"+x.getId()).collect(Collectors.toList()) );
         adDto.setPk( ad.getPk() );
         if ( ad.getPrice() != null ) {
             adDto.setPrice( ad.getPrice() );
@@ -42,7 +47,7 @@ public abstract class AdsMapper {
 
         ad.setPk( adDto.getPk() );
         if ( adDto.getPrice() != null ) {
-            ad.setPrice( adDto.getPrice().intValue() );
+            ad.setPrice( adDto.getPrice() );
         }
         User user = new User();
         user.setId(adDto.getAuthor());
@@ -50,13 +55,20 @@ public abstract class AdsMapper {
 
         );
         ad.setTitle( adDto.getTitle() );
-        List<String> paths = Stream.of(adDto.getImage().split(",", -1))
-                .collect(Collectors.toList());
+        List<String> paths = adDto.getImage();
 
         List<AdImage> images = paths.stream()
                 .map(path -> {
+                    Long id = null;
+                    Pattern pattern = Pattern.compile("[\\w\\W]+\\/(\\d+)");
+                    Matcher matcher = pattern.matcher(path);
+                    if (matcher.find()) {
+                        id = Long.valueOf(matcher.group(1));
+                    }
                     AdImage image = new AdImage();
-                    image.setFilePath(path);
+                    if (id!=null) {
+                        image.setId(id);
+                    }
                     return image;
                 })
                 .collect(Collectors.toList());

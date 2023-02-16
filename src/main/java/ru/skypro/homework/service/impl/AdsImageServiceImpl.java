@@ -9,9 +9,11 @@ import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.repository.AdImageRepository;
 import ru.skypro.homework.service.AdsImageService;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     @Override
-    public void createImage(MultipartFile image) throws IOException {
+    public AdImage createImage(MultipartFile image) throws IOException {
         logger.info("Metod\"AdsImageServiceImpl.createImage()\" was called");
         Path filePath = Path.of(imageDir,  image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
@@ -49,17 +51,18 @@ public class AdsImageServiceImpl implements AdsImageService {
             bis.transferTo(bos);
         }
         AdImage adImage = new AdImage();
+        adImage.setBytea(image.getBytes());
         adImage.setFilePath(filePath.toString());
         adImage.setFileSize(image.getSize());
         adImage.setMediaType(image.getContentType());
 
-        adImageRepository.save(adImage);
+        return adImageRepository.save(adImage);
     }
 
     @Override
     public void updateAdsImage(Long id, MultipartFile image) throws IOException {
         logger.info("Metod\"AdsImageServiceImpl.updateAdsImage()\" was called");
-        Path filePath = Path.of(imageDir, id + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
+        Path filePath = Path.of(imageDir,  image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -70,13 +73,24 @@ public class AdsImageServiceImpl implements AdsImageService {
         ) {
             bis.transferTo(bos);
         }
+        Optional<AdImage> adImage = adImageRepository.findById(id);
+        if (adImage.isPresent()) {
+            adImage.get().setBytea(image.getBytes());
+            adImage.get().setFilePath(filePath.toString());
+            adImage.get().setFileSize(image.getSize());
+            adImage.get().setMediaType(image.getContentType());
+        } else {
+            throw new EntityNotFoundException();
+        }
 
-        AdImage adImage = findAdImage(id);
-        adImage.setFilePath(filePath.toString());
-        adImage.setFileSize(image.getSize());
-        adImage.setMediaType(image.getContentType());
+        adImageRepository.save(adImage.get());
+    }
 
-        adImageRepository.save(adImage);
+    @Override
+    public byte[] getAdsImage(Long id) {
+        logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
+        Optional<AdImage> adImage = adImageRepository.findById(id);
+        return adImage.map(AdImage::getBytea).orElse(null);
     }
 
     private String getExtension(String fileName) {
@@ -84,9 +98,15 @@ public class AdsImageServiceImpl implements AdsImageService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    public AdImage findAdImage(Long adPk) {
+    public AdImage findAdImage(Long id) {
         logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
-        Optional<AdImage> adImage = Optional.ofNullable(adImageRepository.findByAdPk(adPk));
-        return adImage.orElse(new AdImage());
+        Optional<AdImage> adImage = adImageRepository.findById(id);
+        return adImage.orElseThrow(EntityNotFoundException::new);
     }
+
+//    public List<AdImage> findAdImages(Long id) {
+//        logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
+//        Optional<AdImage> adImage = adImageRepository.findById(id);
+//        return adImage.orElseThrow(() -> new EntityNotFoundException());
+//    }
 }

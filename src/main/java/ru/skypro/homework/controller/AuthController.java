@@ -42,8 +42,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<RegisterReq> register(@RequestBody RegisterReq req) {
         logger.info("Controller\"AuthController.register()\" was called");
-        Role role = req.getRole() == null ? USER : req.getRole();
-        if (authService.register(req, role)) {
+        if (authService.register(req)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

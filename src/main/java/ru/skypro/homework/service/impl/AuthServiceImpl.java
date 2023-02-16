@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterReq registerReq, Role role) {
+    public boolean register(RegisterReq registerReq) {
         logger.info("Metod\"AuthServiceImpl.register()\" was called");
         Optional<User> userByUsername = userRepository.findUserByUsername(registerReq.getUsername());
         if (userByUsername.isPresent()) {

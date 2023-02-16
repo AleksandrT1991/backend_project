@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdComment;
+import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mappers.ad.AdCommentMapper;
 import ru.skypro.homework.mappers.ad.AdsMapper;
@@ -21,7 +22,6 @@ import ru.skypro.homework.repository.AdImageRepository;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsService;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,11 +54,15 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDto createAd(CreateAdsDto createAdsDto) {
+    public AdDto createAd(CreateAdsDto createAdsDto, List<AdImage> imageSaved) {
         logger.info("Metod\"AdsServiceImpl.createAd()\" was called");
-        return AdsMapper.INSTANCE.toDto(
-                adRepository.save(
-                        CreateAdsMapper.INSTANCE.toEntity(createAdsDto)));
+        Ad ad = CreateAdsMapper.INSTANCE.toEntity(createAdsDto);
+        ad.setImage(imageSaved);
+        User user = new User();
+        user.setId(1L);
+        ad.setUser(user);
+        Ad save = adRepository.save(ad);
+        return AdsMapper.INSTANCE.toDto(save);
     }
 
     @Override
@@ -80,7 +84,7 @@ public class AdsServiceImpl implements AdsService {
         user.setId(adCommentDto.getAuthor());
 
         AdComment byPk = new AdComment();
-
+        byPk.setId(adComments.size()-1L);
         byPk.setText(adCommentDto.getText());
         byPk.setUser(user);
         byPk.setPk(adPk);
@@ -114,9 +118,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdCommentDto getComments(Long id, Long adPk) {
+    public AdCommentDto getComments(Long pk, Long id) {
         logger.info("Metod\"AdsServiceImpl.getComments()\" was called");
-        return AdCommentMapper.INSTANCE.toDto(adCommentRepository.findByIdAndPk(id, adPk).orElseThrow(EntityNotFoundException::new));
+        Optional<AdComment> adComment = adCommentRepository.findByPkAndId(pk, id);
+        /** тут почему то падает ошибка фронта потому что он запрашивает два раза пк объявления
+         */
+        AdCommentDto adCommentDto = AdCommentMapper.INSTANCE.toDto(adComment.orElseThrow());
+        return adCommentDto;
     }
 
     @Override
@@ -128,17 +136,17 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto) {
         logger.info("Metod\"AdsServiceImpl.updateComments()\" was called");
-        Optional<AdComment> byIdAndPk = Optional.ofNullable(adCommentRepository.findByIdAndPk(id, adPk)).orElseThrow(EntityNotFoundException::new);
-        if (byIdAndPk.isPresent()) {
+        Optional<AdComment> adComment = adCommentRepository.findByPkAndId(id, adPk);
+        if (adComment.isPresent()) {
             User user = new User();
             user.setId(adCommentDto.getAuthor());
 
-            byIdAndPk.get().setUser(user);
-            byIdAndPk.get().setText(adCommentDto.getText());
-            byIdAndPk.get().setCreatedAt(adCommentDto.getCreatedAt());
-            byIdAndPk.get().setPk(adPk);
+            adComment.get().setUser(user);
+            adComment.get().setText(adCommentDto.getText());
+            adComment.get().setCreatedAt(adCommentDto.getCreatedAt());
+            adComment.get().setPk(adPk);
 
-            return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byIdAndPk.get()));
+            return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(adComment.get()));
         } else
             return null;
     }
