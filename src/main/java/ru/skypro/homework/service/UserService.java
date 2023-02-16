@@ -4,20 +4,20 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.security.MyUser;
 
 import javax.security.auth.login.CredentialNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 
 public interface UserService {
 
-    PasswordDto setPassword(PasswordDto passwordDto) throws CredentialNotFoundException;
+    void setPassword(PasswordDto passwordDto, MyUser myUser) throws CredentialNotFoundException;
 //
 //    UserDto getUser();
 
     User getUser(String username);
 
-    Optional<UserDto> updateUser(UserDto userDto);
+    UserDto updateUser(UserDto userDto, String username);
 
     UserDto getUserDtoByUsername(String username);
 
