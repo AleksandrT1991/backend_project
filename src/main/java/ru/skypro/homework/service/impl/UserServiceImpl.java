@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
+import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.mappers.user.UserMapper;
 import ru.skypro.homework.repository.UserImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -24,20 +26,24 @@ import java.util.Optional;
 
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import static ru.skypro.homework.mappers.user.UserMapper.toDto;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserImageRepository userImageRepository;
+    public final  UserMapper userMapper;
     /**
      * event recording process
      */
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserRepository userRepository, UserImageRepository userImageRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserImageRepository userImageRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userImageRepository = userImageRepository;
+        this.userMapper = userMapper;
     }
 
     @Value("${user.image.dir.path}")
@@ -64,17 +70,19 @@ public class UserServiceImpl implements UserService {
         return passwordDto;
     }
 
+//    @Override
+////    public UserDto getUser() {
+////        return null;
+////    }
+
     /**
      * event recording process
      * @return
      */
     @Override
-    public UserDto getUser() {
+    public User getUser(String username) {
         logger.info("Metod\"UserServiceImpl.getUser()\" was called");
-        Long userId = 1L;
-        return UserMapper.INSTANCE.toDto(
-                userRepository.findUserById(userId)
-                        .orElseThrow(RuntimeException::new));
+        return userRepository.findUserByUsername(username).orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -86,15 +94,22 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         } else {
             user.setId(optional.get().getId());
-            return Optional.of(UserMapper.INSTANCE.toDto(userRepository.save(user)));
+            return Optional.of(toDto(userRepository.save(user)));
         }
     }
 
     @Override
-    public void updateUserImage(MultipartFile image) throws IOException {
+    public UserDto getUserDtoByUsername(String username) {
+        User responce = getUser(username);
+        return toDto(responce);
+    }
+
+    @Override
+    public void updateUserImage(String username, MultipartFile image) throws IOException {
         logger.info("Metod\"UserServiceImpl.updateUserImage()\" was called");
+
         Long userId = 1L;
-        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        User user = userRepository.findUserById(userId).orElseThrow(EntityNotFoundException::new);
         Path filePath = Path.of(imageDir, image.getName() + "." + getExtension(Objects.requireNonNull(image.getOriginalFilename())));
         createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -111,7 +126,6 @@ public class UserServiceImpl implements UserService {
         userImage.setFileSize(image.getSize());
         userImage.setBytea(image.getBytes());
         userImage.setMediaType(image.getContentType());
-
         UserImage save = userImageRepository.save(userImage);
         user.setImage(save);
         userRepository.save(user);

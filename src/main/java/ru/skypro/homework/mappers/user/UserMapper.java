@@ -1,21 +1,25 @@
 package ru.skypro.homework.mappers.user;
 
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public abstract class UserMapper {
     public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    public UserDto toDto(User user) {
+
+     public static UserDto toDto(User user) {
         if (user == null) {
             return null;
         } else {
             UserDto userDto = new UserDto();
-            Long id = this.userImageId(user);
+            Long id = userImageId(user);
             if (id != null) {
                 userDto.setImage(String.valueOf(id));
             }
@@ -27,7 +31,7 @@ public abstract class UserMapper {
             userDto.setPhone(user.getPhone());
             userDto.setRegDate(user.getRegDate());
             userDto.setCity(user.getCity());
-            userDto.setImage("/image/"+user.getImage().getId());
+            userDto.setImage("/image/"+user.getImage());
             return userDto;
         }
     }
@@ -49,7 +53,7 @@ public abstract class UserMapper {
         }
     }
 
-    private Long userImageId(User user) {
+    private static Long userImageId(User user) {
         if (user == null) {
             return null;
         } else {

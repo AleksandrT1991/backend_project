@@ -6,5 +6,6 @@ import ru.skypro.homework.entity.UserImage;
 
 @Repository
 public interface UserImageRepository extends JpaRepository<UserImage, Long> {
-
+//    @Override
+//    Optional<UserImage> findByUserId (Long userId);
 }
