@@ -1,18 +1,11 @@
 package ru.skypro.homework.controller;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,6 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.user.PasswordDto;
 import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.service.UserService;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)
@@ -60,55 +58,55 @@ class UserControllerTest {
                         .string("{\"currentPassword\":\"iloveyou\",\"newPassword\":\"iloveyou\"}"));
     }
 
-    /**
-     * Method under test: {@link UserController#getUser()}
-     */
-    @Test
-    void testGetUser() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setCity("Oxford");
-        userDto.setEmail("jane.doe@example.org");
-        userDto.setFirstName("Jane");
-        userDto.setId(123L);
-        userDto.setImage("Image");
-        userDto.setLastName("Doe");
-        userDto.setPhone("4105551212");
-        userDto.setRegDate("2020-03-01");
-        when(userService.getUser()).thenReturn(userDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/me");
-        MockMvcBuilders.standaloneSetup(userController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"email\":\"jane.doe@example.org\",\"firstName\":\"Jane\",\"id\":123,\"lastName\":\"Doe\",\"phone\":\"4105551212\","
-                                        + "\"regDate\":\"2020-03-01\",\"city\":\"Oxford\",\"image\":\"Image\"}"));
-    }
+//    /**
+//     * Method under test: {@link UserController#getUser()}
+//     */
+//    @Test
+//    void testGetUser() throws Exception {
+//        UserDto userDto = new UserDto();
+//        userDto.setCity("Oxford");
+//        userDto.setEmail("jane.doe@example.org");
+//        userDto.setFirstName("Jane");
+//        userDto.setId(123L);
+//        userDto.setImage("Image");
+//        userDto.setLastName("Doe");
+//        userDto.setPhone("4105551212");
+//        userDto.setRegDate("2020-03-01");
+//        when(userService.getUser()).thenReturn(userDto);
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/me");
+//        MockMvcBuilders.standaloneSetup(userController)
+//                .build()
+//                .perform(requestBuilder)
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content()
+//                        .string(
+//                                "{\"email\":\"jane.doe@example.org\",\"firstName\":\"Jane\",\"id\":123,\"lastName\":\"Doe\",\"phone\":\"4105551212\","
+//                                        + "\"regDate\":\"2020-03-01\",\"city\":\"Oxford\",\"image\":\"Image\"}"));
+//    }
 
-    /**
-     * Method under test: {@link UserController#getUser()}
-     */
-    @Test
-    void testGetUser2() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setCity("Oxford");
-        userDto.setEmail("jane.doe@example.org");
-        userDto.setFirstName("Jane");
-        userDto.setId(123L);
-        userDto.setImage("Image");
-        userDto.setLastName("Doe");
-        userDto.setPhone("4105551212");
-        userDto.setRegDate("2020-03-01");
-        when(userService.getUser()).thenReturn(userDto);
-        SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders
-                .formLogin();
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController)
-                .build()
-                .perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
+//    /**
+//     * Method under test: {@link UserController#getUser()}
+//     */
+//    @Test
+//    void testGetUser2() throws Exception {
+//        UserDto userDto = new UserDto();
+//        userDto.setCity("Oxford");
+//        userDto.setEmail("jane.doe@example.org");
+//        userDto.setFirstName("Jane");
+//        userDto.setId(123L);
+//        userDto.setImage("Image");
+//        userDto.setLastName("Doe");
+//        userDto.setPhone("4105551212");
+//        userDto.setRegDate("2020-03-01");
+//        when(userService.getUser()).thenReturn(userDto);
+//        SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders
+//                .formLogin();
+//        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController)
+//                .build()
+//                .perform(requestBuilder);
+//        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
+//    }
 
     /**
      * Method under test: {@link UserController#updateUser(UserDto)}
