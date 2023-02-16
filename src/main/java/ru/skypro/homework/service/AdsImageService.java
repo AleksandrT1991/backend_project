@@ -1,16 +1,10 @@
 package ru.skypro.homework.service;
 
-import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.AdImage;
+import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.File;
 
 public interface AdsImageService {
 
-    AdImage createImage(MultipartFile image) throws IOException;
-
-    void updateAdsImage(Long id, MultipartFile image) throws IOException;
-
-    byte[] getAdsImage(Long id);
+    public void updateUserImage(String id, File file);
 }

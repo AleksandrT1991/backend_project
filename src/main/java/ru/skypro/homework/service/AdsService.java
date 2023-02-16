@@ -1,35 +1,29 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.dto.ad.AdCommentDto;
-import ru.skypro.homework.dto.ad.AdDto;
-import ru.skypro.homework.dto.ad.CreateAdsDto;
-import ru.skypro.homework.dto.ad.FullAdDto;
-import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
-import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
-import ru.skypro.homework.entity.AdImage;
-
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import ru.skypro.homework.dto.AdDto;
 
 public interface AdsService {
-    ResponseWrapperAds getAds();
 
-    AdDto createAd(CreateAdsDto createAdsDto, List<AdImage> imageSaved);
+    public void getAd(AdDto ad);
 
-    ResponseWrapperComments getComments(Long adPk);
+    public void addAd(AdDto ad);
 
-    AdCommentDto addComments(Long adPk, AdCommentDto adCommentDto);
+    public void getComments(String adPk);
 
-    FullAdDto getFullAd(Long id);
+    public void addComments(String adPk);
 
-    void removeAds(Long pk);
+    public void getFullAd(Integer id);
 
-    AdDto updateAds(Long id, CreateAdsDto adDto);
+    public void removeAds(Integer id);
 
-    AdCommentDto getComments(Long adPk, Long id);
+    public void updateAds(Integer id);
 
-    void deleteComments(Long id, Long adPk);
+    public void getComments(Integer id, String adPk);
 
-    AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto);
+    public void deleteComments(Integer id, String adPk);
 
-    ResponseWrapperAds getAdsMe();
+    public void updateComments(Integer id, String adPk) ;
+
+    public void getAdsMe(AdDto ad);
 }

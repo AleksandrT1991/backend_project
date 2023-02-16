@@ -1,64 +1,50 @@
 package ru.skypro.homework.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.enums.Role;
-import ru.skypro.homework.dto.user.RegisterReq;
-import ru.skypro.homework.entity.User;
-import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.security.MyUserDetailsService;
+import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.UserService;
-
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final MyUserDetailsService manager;
+    private final UserDetailsManager manager;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
 
-    private final UserService userService;
-
-    private final UserRepository userRepository;
-
-    public AuthServiceImpl(MyUserDetailsService manager, PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository)  {
+    public AuthServiceImpl(UserDetailsManager manager) {
         this.manager = manager;
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
-        this.userRepository = userRepository;
+        this.encoder = new BCryptPasswordEncoder();
     }
-    /**
-     * event recording process
-     */
-    private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Override
     public boolean login(String userName, String password) {
-        logger.info("Metod\"AuthServiceImpl.login()\" was called");
+        if (!manager.userExists(userName)) {
+            return false;
+        }
         UserDetails userDetails = manager.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
-        return passwordEncoder.matches(password, encryptedPassword);
+        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
+        return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
     }
 
     @Override
-    public boolean register(RegisterReq registerReq) {
-        logger.info("Metod\"AuthServiceImpl.register()\" was called");
-        Optional<User> userByUsername = userRepository.findUserByUsername(registerReq.getUsername());
-        if (userByUsername.isPresent()) {
+    public boolean register(RegisterReq registerReq, Role role) {
+        if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-        User userSaved = new User();
-        userSaved.setUsername(registerReq.getUsername());
-        userSaved.setPassword(registerReq.getPassword());
-        userSaved.setFirstName(registerReq.getFirstName());
-        userSaved.setLastName(registerReq.getLastName());
-        userSaved.setPassword(passwordEncoder.encode(registerReq.getPassword()));
-        userRepository.save(userSaved);
+        manager.createUser(
+                User.withDefaultPasswordEncoder()
+                        .password(registerReq.getPassword())
+                        .username(registerReq.getUsername())
+                        .roles(role.name())
+                        .build()
+        );
         return true;
     }
 }
