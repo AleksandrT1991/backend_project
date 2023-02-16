@@ -7,11 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.service.AdsImageService;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/image")

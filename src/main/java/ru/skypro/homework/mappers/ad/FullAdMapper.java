@@ -5,13 +5,11 @@ import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.ad.FullAdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
-import ru.skypro.homework.entity.User;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mapper
 public abstract class FullAdMapper {
