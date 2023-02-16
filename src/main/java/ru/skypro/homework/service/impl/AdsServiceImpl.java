@@ -20,8 +20,11 @@ import ru.skypro.homework.mappers.ad.FullAdMapper;
 import ru.skypro.homework.repository.AdCommentRepository;
 import ru.skypro.homework.repository.AdImageRepository;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.security.MyUser;
 import ru.skypro.homework.service.AdsService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,16 +35,22 @@ public class AdsServiceImpl implements AdsService {
     private final AdCommentRepository adCommentRepository;
     private final AdImageRepository adImageRepository;
 
+    private final MyUser myUser;
 
-    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository, AdImageRepository adImageRepository) {
+
+    public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository, AdImageRepository adImageRepository,
+                          MyUser myUser, UserRepository userRepository) {
         this.adRepository = adRepository;
         this.adCommentRepository = adCommentRepository;
         this.adImageRepository = adImageRepository;
+        this.myUser = myUser;
+        this.userRepository = userRepository;
     }
     /**
      * event recording process
      */
     private final Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
+    private final UserRepository userRepository;
 
     @Override
     public ResponseWrapperAds getAds() {
@@ -59,7 +68,7 @@ public class AdsServiceImpl implements AdsService {
         Ad ad = CreateAdsMapper.INSTANCE.toEntity(createAdsDto);
         ad.setImage(imageSaved);
         User user = new User();
-        user.setId(1L);
+        user.setId(myUser.getUser().getId());
         ad.setUser(user);
         Ad save = adRepository.save(ad);
         return AdsMapper.INSTANCE.toDto(save);
@@ -89,7 +98,8 @@ public class AdsServiceImpl implements AdsService {
         byPk.setUser(user);
         byPk.setPk(adPk);
         byPk.setCreatedAt(adCommentDto.getCreatedAt());
-        return AdCommentMapper.INSTANCE.toDto(adCommentRepository.save(byPk));
+        AdComment save = adCommentRepository.save(byPk);
+        return AdCommentMapper.INSTANCE.toDto(save);
     }
 
     @Override
@@ -152,10 +162,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe() {
+    public ResponseWrapperAds getAdsMe(String username) {
         logger.info("Metod\"AdsServiceImpl.getAdsMe()\" was called");
-        Long userId = 1L;
-        List<AdDto> ads = adRepository.findAllByUser_Id(userId).stream().map(a-> AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
+        Optional<User> userByUsername = userRepository.findUserByUsername(username);
+        List<AdDto> ads = adRepository.findAllByUser_Id(userByUsername.orElseThrow(EntityNotFoundException::new)
+                                            .getId()).stream()
+                                            .map(a-> AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         responseWrapperAds.setCount(ads.size());
         responseWrapperAds.setResults(ads);

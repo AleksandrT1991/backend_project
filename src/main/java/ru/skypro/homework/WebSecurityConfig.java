@@ -22,7 +22,7 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login", "/register",
-            "/ads/**", "/users/**"
+            "/ads/**", "/users/**", "/image/**"
     };
 
 //    @Bean

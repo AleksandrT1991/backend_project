@@ -138,6 +138,7 @@ public class UserController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws Exception {
         logger.info("Controller\"UserController.updateUserImage()\" was called");

@@ -129,6 +129,9 @@ public class UserServiceImpl implements UserService {
         userImage.setMediaType(image.getContentType());
         userImage.setUser(imageUser);
         userImageRepository.save(userImage);
+
+        imageUser.setImage(userImage);
+        userRepository.save(imageUser);
     }
 
     private String getExtension(String fileName) {

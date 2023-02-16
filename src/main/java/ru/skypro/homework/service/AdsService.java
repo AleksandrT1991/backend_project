@@ -31,5 +31,5 @@ public interface AdsService {
 
     AdCommentDto updateComments(Long id, Long adPk, AdCommentDto adCommentDto);
 
-    ResponseWrapperAds getAdsMe();
+    ResponseWrapperAds getAdsMe(String username);
 }

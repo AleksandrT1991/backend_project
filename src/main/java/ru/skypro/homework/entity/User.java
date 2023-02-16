@@ -18,6 +18,10 @@ public class User {
     @Type(type = "org.hibernate.type.TextType")
     private String firstName;
 
+    @Column(name = "username")
+    @Type(type = "org.hibernate.type.TextType")
+    private String username;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -39,7 +43,7 @@ public class User {
     @Type(type = "org.hibernate.type.TextType")
     private String city;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "image")
     private UserImage image;
 

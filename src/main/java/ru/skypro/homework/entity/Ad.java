@@ -35,11 +35,11 @@ public class Ad {
     @Type(type = "org.hibernate.type.TextType")
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "id")
     private List<AdImage> image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 }

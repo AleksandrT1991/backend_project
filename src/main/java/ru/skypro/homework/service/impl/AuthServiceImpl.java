@@ -12,6 +12,7 @@ import ru.skypro.homework.security.MyUserDetailsService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -56,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
         userSaved.setPassword(registerReq.getPassword());
         userSaved.setFirstName(registerReq.getFirstName());
         userSaved.setLastName(registerReq.getLastName());
+        userSaved.setRegDate(LocalDate.now().toString());
         userSaved.setPassword(passwordEncoder.encode(registerReq.getPassword()));
         userSaved.setPhone(registerReq.getPhone());
         userRepository.save(userSaved);

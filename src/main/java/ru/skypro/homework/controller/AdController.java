@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdCommentDto;
@@ -20,6 +22,7 @@ import ru.skypro.homework.dto.wrappers.ResponseWrapperAds;
 import ru.skypro.homework.dto.wrappers.ResponseWrapperComments;
 import ru.skypro.homework.exception.AdsNotFoundException;
 import ru.skypro.homework.entity.AdImage;
+import ru.skypro.homework.security.MyUser;
 import ru.skypro.homework.service.AdsImageService;
 import ru.skypro.homework.service.AdsService;
 
@@ -35,6 +38,8 @@ public class AdController {
 
     private final AdsService adsService;
     private final AdsImageService adsImageService;
+
+    private final MyUser myUser;
     /**
      * event recording process
      */
@@ -86,6 +91,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -118,6 +124,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{adPk}/comments")
     public ResponseEntity<ResponseWrapperComments> getComments(@PathVariable Long adPk) {
         logger.info("Controller\"AdController.getComments()\" was called");
@@ -150,6 +157,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{adPk}/comments")
     public AdCommentDto addComments(@PathVariable Long adPk, @RequestBody AdCommentDto adCommentDto) {
         logger.info("Controller\"AdController.addComments()\" was called");
@@ -171,6 +179,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<FullAdDto> getFullAd(@PathVariable Long id) {
         logger.info("Controller\"AdController.getFullAd()\" was called");
@@ -196,6 +205,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public void removeAds(@PathVariable Long id) {
         logger.info("Controller\"AdController.removeAds()\" was called");
@@ -223,6 +233,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
     public AdDto updateAds(@PathVariable Long id, @RequestBody CreateAdsDto adDto) {
         logger.info("Controller\"AdController.updateAds()\" was called");
@@ -249,6 +260,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{adPk}/comments/{id}")
     public ResponseEntity<AdCommentDto> getComments(@PathVariable Long id, @PathVariable Long adPk) {
         logger.info("Controller\"AdController.getComments()\" was called");
@@ -277,6 +289,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{adPk}/comments/{id}")
     public void deleteComments(@PathVariable Long id, @PathVariable Long adPk) {
         logger.info("Controller\"AdController.deleteComments()\" was called");
@@ -304,6 +317,7 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{adPk}/comments/{id}")
     public AdCommentDto updateComments(@PathVariable Long id, @PathVariable Long adPk,
                                        @RequestBody AdCommentDto adCommentDto) {
@@ -331,28 +345,11 @@ public class AdController {
                     )
             }
     )
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public ResponseEntity<List<ResponseWrapperAds>> getAdsMe(
-            @RequestHeader Boolean authenticated,
-            @RequestHeader List<String> authorities,
-            @RequestHeader String credentials,
-            @RequestHeader String details,
-            @RequestHeader String principal) {
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
         logger.info("Controller\"AdController.getAdsMe()\" was called");
-        boolean credentialsIsNotEmpty = credentials != null && !credentials.isBlank();
-        boolean detailsNotEmpty = details != null && !details.isBlank();
-        boolean principalIsNotEmpty = principal != null && !principal.isBlank();
-        if ((credentialsIsNotEmpty || detailsNotEmpty || principalIsNotEmpty || authenticated) && authorities == null) {
-            return ResponseEntity.badRequest().build();
-        } else if ((credentialsIsNotEmpty || detailsNotEmpty || principalIsNotEmpty || authenticated) && authorities != null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            Optional<ResponseWrapperAds> result = Optional.ofNullable(adsService.getAdsMe());
-            if (result.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            } else {
-                return ResponseEntity.ok(List.of(result.get()));
-            }
-        }
+        ResponseWrapperAds result = adsService.getAdsMe(myUser.getUsername());
+        return ResponseEntity.ok(result);
     }
 }
