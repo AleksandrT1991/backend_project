@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.user.LoginReq;
 import ru.skypro.homework.dto.user.RegisterReq;
-import ru.skypro.homework.dto.enums.Role;
 import ru.skypro.homework.service.AuthService;
-
-import static ru.skypro.homework.dto.enums.Role.USER;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -30,7 +27,7 @@ public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
-    public ResponseEntity<LoginReq> login(@RequestBody LoginReq req) {
+    public ResponseEntity<?> login(@RequestBody LoginReq req) {
         logger.info("Controller\"AuthController.login()\" was called");
         if (authService.login(req.getUsername(), req.getPassword())) {
             return ResponseEntity.ok().build();
@@ -40,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterReq> register(@RequestBody RegisterReq req) {
+    public ResponseEntity<?> register(@RequestBody RegisterReq req) {
         logger.info("Controller\"AuthController.register()\" was called");
         if (authService.register(req)) {
             return ResponseEntity.ok().build();
