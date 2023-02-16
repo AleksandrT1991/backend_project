@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.enums.Role;
 import ru.skypro.homework.dto.user.RegisterReq;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -58,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
         userSaved.setFirstName(registerReq.getFirstName());
         userSaved.setLastName(registerReq.getLastName());
         userSaved.setPassword(passwordEncoder.encode(registerReq.getPassword()));
+        userSaved.setPhone(registerReq.getPhone());
         userRepository.save(userSaved);
         return true;
     }

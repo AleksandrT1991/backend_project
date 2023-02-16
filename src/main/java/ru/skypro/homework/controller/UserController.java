@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,6 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
 import javax.security.auth.login.CredentialNotFoundException;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -63,9 +61,10 @@ public class UserController {
     )
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/set_password")
-    public PasswordDto setPassword(@RequestBody PasswordDto passwordDto) throws CredentialNotFoundException {
+    public ResponseEntity <Void> setPassword (@RequestBody PasswordDto passwordDto) throws CredentialNotFoundException {
         logger.info("Controller\"UserController.setPassword()\" was called");
-        return userService.setPassword(passwordDto);
+        userService.setPassword(passwordDto, myUser);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -124,11 +123,7 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         logger.info("Controller\"UserController.updateUser()\" was called");
-        Optional<UserDto> result = userService.updateUser(userDto);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(result.get());
+        return ResponseEntity.ok(userService.updateUser(userDto, myUser.getUsername()));
     }
 
     @Operation(

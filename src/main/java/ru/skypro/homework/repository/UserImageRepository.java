@@ -4,8 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.entity.UserImage;
 
+import java.util.Optional;
+
 @Repository
 public interface UserImageRepository extends JpaRepository<UserImage, Long> {
-//    @Override
-//    Optional<UserImage> findByUserId (Long userId);
+
+
+    Optional<UserImage> findByUserId (Long userId);
 }
