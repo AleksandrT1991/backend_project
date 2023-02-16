@@ -10,38 +10,34 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "email")
+    @Type(type = "org.hibernate.type.TextType")
+    private String email;
 
     @Column(name = "first_name")
     @Type(type = "org.hibernate.type.TextType")
     private String firstName;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "last_name")
     @Type(type = "org.hibernate.type.TextType")
     private String lastName;
-
-    @Column(name = "email")
-    @Type(type = "org.hibernate.type.TextType")
-    private String email;
-
-    @Column(name = "username")
-    @Type(type = "org.hibernate.type.TextType")
-    private String username;
 
     @Column(name = "phone")
     @Type(type = "org.hibernate.type.TextType")
     private String phone;
 
-    @Column(name = "city")
-    @Type(type = "org.hibernate.type.TextType")
-    private String city;
-
     @Column(name = "reg_date")
     @Type(type = "org.hibernate.type.TextType")
     private String regDate;
+
+    @Column(name = "city")
+    @Type(type = "org.hibernate.type.TextType")
+    private String city;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image")
