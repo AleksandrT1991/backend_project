@@ -6,9 +6,18 @@ import ru.skypro.homework.entity.UserImage;
 
 import java.util.Optional;
 
+/**
+ * The interface User image repository.
+ */
 @Repository
 public interface UserImageRepository extends JpaRepository<UserImage, Long> {
 
 
+    /**
+     * Find by user id optional.
+     *
+     * @param userId the user id
+     * @return the optional
+     */
     Optional<UserImage> findByUserId (Long userId);
 }

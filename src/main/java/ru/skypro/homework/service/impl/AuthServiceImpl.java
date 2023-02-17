@@ -15,6 +15,9 @@ import ru.skypro.homework.service.UserService;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * The type Auth service.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -26,6 +29,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Instantiates a new Auth service.
+     *
+     * @param manager         the manager
+     * @param passwordEncoder the password encoder
+     * @param userService     the user service
+     * @param userRepository  the user repository
+     */
     public AuthServiceImpl(MyUserDetailsService manager, PasswordEncoder passwordEncoder, UserService userService, UserRepository userRepository)  {
         this.manager = manager;
         this.passwordEncoder = passwordEncoder;

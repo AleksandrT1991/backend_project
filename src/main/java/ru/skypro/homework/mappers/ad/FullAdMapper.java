@@ -11,11 +11,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * The type Full ad mapper.
+ */
 @Mapper
 public abstract class FullAdMapper {
 
+    /**
+     * The constant INSTANCE.
+     */
     public static FullAdMapper INSTANCE = Mappers.getMapper( FullAdMapper.class );
 
+    /**
+     * To dto full ad dto.
+     *
+     * @param ad the ad
+     * @return the full ad dto
+     */
     public FullAdDto toDto(Ad ad) {
         if ( ad == null ) {
             return null;
@@ -37,6 +49,12 @@ public abstract class FullAdMapper {
         return fullAdDto;
     }
 
+    /**
+     * To entity ad.
+     *
+     * @param fullAdDto the full ad dto
+     * @return the ad
+     */
     public Ad toEntity(FullAdDto fullAdDto) {
         if ( fullAdDto == null ) {
             return null;

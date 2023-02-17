@@ -1,10 +1,12 @@
 package ru.skypro.homework.dto.ad;
 
 import lombok.Data;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 
+/**
+ * The type Full ad dto.
+ */
 @Data
 public class FullAdDto {
 

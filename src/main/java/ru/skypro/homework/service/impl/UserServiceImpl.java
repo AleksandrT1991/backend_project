@@ -29,20 +29,32 @@ import static java.nio.file.Files.createDirectories;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static ru.skypro.homework.mappers.user.UserMapper.toDto;
 
+/**
+ * The type User service.
+ */
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserImageRepository userImageRepository;
+    /**
+     * The User mapper.
+     */
     public final  UserMapper userMapper;
     private final MyUserDetailsService manager;
     private final PasswordEncoder passwordEncoder;
-    /**
-     * event recording process
-     */
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param userRepository      the user repository
+     * @param userImageRepository the user image repository
+     * @param userMapper          the user mapper
+     * @param manager             the manager
+     * @param passwordEncoder     the password encoder
+     */
     public UserServiceImpl(UserRepository userRepository, UserImageRepository userImageRepository, UserMapper userMapper, MyUserDetailsService manager, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userImageRepository = userImageRepository;
@@ -54,12 +66,6 @@ public class UserServiceImpl implements UserService {
     @Value("${user.image.dir.path}")
     private String imageDir;
 
-    /**
-     * event recording process
-     * @param passwordDto
-     * we take the user's password from the data badly and compare it with the current one, if the passwords match, change the password
-     * @return passwordDto
-     */
     @Override
     public void setPassword(PasswordDto passwordDto, MyUser myUser) {
         logger.info("Metod\"UserServiceImpl.setPassword()\" was called");
@@ -79,10 +85,6 @@ public class UserServiceImpl implements UserService {
 ////        return null;
 ////    }
 
-    /**
-     * event recording process
-     * @return
-     */
     @Override
     public User getUser(String username) {
         logger.info("Metod\"UserServiceImpl.getUser()\" was called");

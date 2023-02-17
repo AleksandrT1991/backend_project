@@ -5,6 +5,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
+/**
+ * The type Ad image.
+ */
 @Entity
 @Data
 @Table(name = "ad_images")

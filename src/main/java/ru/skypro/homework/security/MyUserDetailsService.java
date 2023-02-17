@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
 
+/**
+ * The type My user details service.
+ */
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {

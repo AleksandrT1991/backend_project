@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Ad controller.
+ */
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
@@ -43,6 +46,11 @@ public class AdController {
      */
     private final Logger logger = LoggerFactory.getLogger(AdController.class);
 
+    /**
+     * Gets ads.
+     *
+     * @return the ads
+     */
     @Operation(
             responses = {
                     @ApiResponse(
@@ -65,6 +73,14 @@ public class AdController {
         }
     }
 
+    /**
+     * Add ad ad dto.
+     *
+     * @param createAdsDto the create ads dto
+     * @param image        the image
+     * @return the ad dto
+     * @throws IOException the io exception
+     */
     @Operation(
             summary = "addAds",
             responses = {
@@ -101,6 +117,12 @@ public class AdController {
         return adsService.createAd(createAdsDto, imageSaved);
     }
 
+    /**
+     * Gets comments.
+     *
+     * @param adPk the ad pk
+     * @return the comments
+     */
     @Operation(
             summary = "getComments",
             responses = {
@@ -134,6 +156,13 @@ public class AdController {
         }
     }
 
+    /**
+     * Add comments ad comment dto.
+     *
+     * @param adPk         the ad pk
+     * @param adCommentDto the ad comment dto
+     * @return the ad comment dto
+     */
     @Operation(
             summary = "addComments",
             responses = {
@@ -162,6 +191,12 @@ public class AdController {
         return adsService.addComments(adPk, adCommentDto);
     }
 
+    /**
+     * Gets full ad.
+     *
+     * @param id the id
+     * @return the full ad
+     */
     @Operation(
             summary = "getFullAdd",
             responses = {
@@ -189,6 +224,11 @@ public class AdController {
         }
     }
 
+    /**
+     * Remove ads.
+     *
+     * @param id the id
+     */
     @Operation(
             summary = "removeAds",
             responses = {
@@ -210,6 +250,13 @@ public class AdController {
         adsService.removeAds(id);
     }
 
+    /**
+     * Update ads ad dto.
+     *
+     * @param id    the id
+     * @param adDto the ad dto
+     * @return the ad dto
+     */
     @Operation(
             summary = "updateAds",
             responses = {
@@ -238,6 +285,13 @@ public class AdController {
         return adsService.updateAds(id, adDto);
     }
 
+    /**
+     * Gets comments.
+     *
+     * @param id   the id
+     * @param adPk the ad pk
+     * @return the comments
+     */
     @Operation(
             responses = {
                     @ApiResponse(
@@ -270,6 +324,12 @@ public class AdController {
         }
     }
 
+    /**
+     * Delete comments.
+     *
+     * @param id   the id
+     * @param adPk the ad pk
+     */
     @Operation(
             summary = "deleteComments",
             responses = {
@@ -294,6 +354,14 @@ public class AdController {
         adsService.deleteComments(id, adPk);
     }
 
+    /**
+     * Update comments ad comment dto.
+     *
+     * @param id           the id
+     * @param adPk         the ad pk
+     * @param adCommentDto the ad comment dto
+     * @return the ad comment dto
+     */
     @Operation(
             summary = "updateComments",
             responses = {
@@ -323,6 +391,11 @@ public class AdController {
         return adsService.updateComments(id, adPk, adCommentDto);
     }
 
+    /**
+     * Gets ads me.
+     *
+     * @return the ads me
+     */
     @Operation(
             responses = {
                     @ApiResponse(

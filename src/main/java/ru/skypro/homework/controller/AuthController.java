@@ -14,6 +14,9 @@ import ru.skypro.homework.dto.user.LoginReq;
 import ru.skypro.homework.dto.user.RegisterReq;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * The type Auth controller.
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -26,6 +29,12 @@ public class AuthController {
      */
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    /**
+     * Login response entity.
+     *
+     * @param req the req
+     * @return the response entity
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
         logger.info("Controller\"AuthController.login()\" was called");
@@ -36,6 +45,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Register response entity.
+     *
+     * @param req the req
+     * @return the response entity
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
         logger.info("Controller\"AuthController.register()\" was called");

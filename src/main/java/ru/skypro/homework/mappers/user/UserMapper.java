@@ -8,13 +8,25 @@ import ru.skypro.homework.dto.user.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 
+/**
+ * The type User mapper.
+ */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public abstract class UserMapper {
+    /**
+     * The constant INSTANCE.
+     */
     public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
 
-     public static UserDto toDto(User user) {
+    /**
+     * To dto user dto.
+     *
+     * @param user the user
+     * @return the user dto
+     */
+    public static UserDto toDto(User user) {
         if (user == null) {
             return null;
         } else {
@@ -36,6 +48,12 @@ public abstract class UserMapper {
         }
     }
 
+    /**
+     * To entity user.
+     *
+     * @param userDto the user dto
+     * @return the user
+     */
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
             return null;
@@ -67,6 +85,12 @@ public abstract class UserMapper {
         }
     }
 
+    /**
+     * User dto to user image user image.
+     *
+     * @param userDto the user dto
+     * @return the user image
+     */
     protected UserImage userDtoToUserImage(UserDto userDto) {
         if (userDto == null) {
             return null;

@@ -10,12 +10,20 @@ import ru.skypro.homework.entity.User;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * The type My user.
+ */
 @Component
 @SessionScope()
 public class MyUser implements UserDetails {
 
     private User user;
 
+    /**
+     * Sets user.
+     *
+     * @param user the user
+     */
     public void setUser(User user) {
         this.user = user;
     }
@@ -55,6 +63,11 @@ public class MyUser implements UserDetails {
         return true;
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     public User getUser() {
         return user;
     }

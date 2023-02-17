@@ -5,6 +5,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
+/**
+ * The type Ad comment.
+ */
 @Entity
 @Data
 @Table(name = "ad_comments")

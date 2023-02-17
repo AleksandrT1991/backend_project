@@ -2,6 +2,9 @@ package ru.skypro.homework.dto.user;
 
 import lombok.Data;
 
+/**
+ * The type User dto.
+ */
 @Data
 public class UserDto {
 

@@ -18,6 +18,9 @@ import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
+/**
+ * The type Ads image service.
+ */
 @Service
 public class AdsImageServiceImpl implements AdsImageService {
 
@@ -31,6 +34,11 @@ public class AdsImageServiceImpl implements AdsImageService {
      */
     private final Logger logger = LoggerFactory.getLogger(AdsImageServiceImpl.class);
 
+    /**
+     * Instantiates a new Ads image service.
+     *
+     * @param adImageRepository the ad image repository
+     */
     public AdsImageServiceImpl(AdImageRepository adImageRepository) {
         this.adImageRepository = adImageRepository;
     }
@@ -97,6 +105,12 @@ public class AdsImageServiceImpl implements AdsImageService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    /**
+     * Find ad image ad image.
+     *
+     * @param id the id
+     * @return the ad image
+     */
     public AdImage findAdImage(Long id) {
         logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
         Optional<AdImage> adImage = adImageRepository.findById(id);

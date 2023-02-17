@@ -6,6 +6,9 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The type Ad.
+ */
 @Entity
 @Data
 @Table(name = "ads")

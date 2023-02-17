@@ -2,6 +2,9 @@ package ru.skypro.homework.dto.user;
 
 import lombok.Data;
 
+/**
+ * The type Password dto.
+ */
 @Data
 public class PasswordDto {
 

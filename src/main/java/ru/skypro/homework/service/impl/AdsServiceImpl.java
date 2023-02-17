@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Ads service.
+ */
 @Service
 public class AdsServiceImpl implements AdsService {
     private final AdRepository adRepository;
@@ -38,6 +41,15 @@ public class AdsServiceImpl implements AdsService {
     private final MyUser myUser;
 
 
+    /**
+     * Instantiates a new Ads service.
+     *
+     * @param adRepository        the ad repository
+     * @param adCommentRepository the ad comment repository
+     * @param adImageRepository   the ad image repository
+     * @param myUser              the my user
+     * @param userRepository      the user repository
+     */
     public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository, AdImageRepository adImageRepository,
                           MyUser myUser, UserRepository userRepository) {
         this.adRepository = adRepository;

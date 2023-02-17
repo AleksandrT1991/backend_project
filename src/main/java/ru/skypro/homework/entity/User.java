@@ -5,6 +5,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
+/**
+ * The type User.
+ */
 @Entity
 @Data
 @Table(name = "users")
