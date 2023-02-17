@@ -33,7 +33,6 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.exception.UserEntersIncorrectPassword;
 import ru.skypro.homework.mappers.user.UserMapper;
-import ru.skypro.homework.mappers.user.UserMapperImpl;
 import ru.skypro.homework.repository.UserImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.MyUser;
@@ -85,7 +84,6 @@ class UserServiceImplTest {
 
         UserRepository userRepository = mock(UserRepository.class);
         UserImageRepository userImageRepository = mock(UserImageRepository.class);
-        UserMapperImpl userMapper = new UserMapperImpl();
         UserRepository userRepository1 = mock(UserRepository.class);
         MyUserDetailsService manager = new MyUserDetailsService(userRepository1, new MyUser());
 
@@ -113,7 +111,6 @@ class UserServiceImplTest {
 
         UserRepository userRepository = mock(UserRepository.class);
         UserImageRepository userImageRepository = mock(UserImageRepository.class);
-        UserMapperImpl userMapper = new UserMapperImpl();
         UserRepository userRepository1 = mock(UserRepository.class);
         MyUserDetailsService manager = new MyUserDetailsService(userRepository1, new MyUser());
 
@@ -193,7 +190,6 @@ class UserServiceImplTest {
 
         UserRepository userRepository = mock(UserRepository.class);
         UserImageRepository userImageRepository = mock(UserImageRepository.class);
-        UserMapperImpl userMapper = new UserMapperImpl();
         UserRepository userRepository1 = mock(UserRepository.class);
         UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, userImageRepository, userMapper,
                 new MyUserDetailsService(userRepository1, new MyUser()), null);
@@ -314,7 +310,6 @@ class UserServiceImplTest {
         UserRepository userRepository = mock(UserRepository.class);
         when(userRepository.save((User) any())).thenReturn(user2);
         UserImageRepository userImageRepository = mock(UserImageRepository.class);
-        UserMapperImpl userMapper = new UserMapperImpl();
         UserRepository userRepository1 = mock(UserRepository.class);
         MyUserDetailsService manager = new MyUserDetailsService(userRepository1, new MyUser());
 
@@ -438,7 +433,6 @@ class UserServiceImplTest {
         UserRepository userRepository = mock(UserRepository.class);
         when(userRepository.save((User) any())).thenReturn(user2);
         UserImageRepository userImageRepository = mock(UserImageRepository.class);
-        UserMapperImpl userMapper = new UserMapperImpl();
         UserRepository userRepository1 = mock(UserRepository.class);
         MyUserDetailsService manager = new MyUserDetailsService(userRepository1, new MyUser());
 
