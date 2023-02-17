@@ -5,19 +5,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.repository.AdImageRepository;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdsImageService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
+/**
+ * The type Ads image service.
+ */
 @Service
 public class AdsImageServiceImpl implements AdsImageService {
 
@@ -30,9 +36,17 @@ public class AdsImageServiceImpl implements AdsImageService {
      * event recording process
      */
     private final Logger logger = LoggerFactory.getLogger(AdsImageServiceImpl.class);
+    private final AdRepository adRepository;
 
-    public AdsImageServiceImpl(AdImageRepository adImageRepository) {
+    /**
+     * Instantiates a new Ads image service.
+     *
+     * @param adImageRepository the ad image repository
+     */
+    public AdsImageServiceImpl(AdImageRepository adImageRepository,
+                               AdRepository adRepository) {
         this.adImageRepository = adImageRepository;
+        this.adRepository = adRepository;
     }
 
     @Override
@@ -72,17 +86,21 @@ public class AdsImageServiceImpl implements AdsImageService {
         ) {
             bis.transferTo(bos);
         }
+
+        Optional<Ad> ad = adRepository.findByImage_Id(id);
+
         Optional<AdImage> adImage = adImageRepository.findById(id);
         if (adImage.isPresent()) {
             adImage.get().setBytea(image.getBytes());
             adImage.get().setFilePath(filePath.toString());
             adImage.get().setFileSize(image.getSize());
             adImage.get().setMediaType(image.getContentType());
+            adImage.get().setAdPk(ad.orElseThrow(EntityNotFoundException::new));
+            adImageRepository.save(adImage.get());
         } else {
             throw new EntityNotFoundException();
         }
 
-        adImageRepository.save(adImage.get());
     }
 
     @Override
@@ -97,6 +115,12 @@ public class AdsImageServiceImpl implements AdsImageService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    /**
+     * Find ad image ad image.
+     *
+     * @param id the id
+     * @return the ad image
+     */
     public AdImage findAdImage(Long id) {
         logger.info("Metod\"AdsImageServiceImpl.findAdImage()\" was called");
         Optional<AdImage> adImage = adImageRepository.findById(id);

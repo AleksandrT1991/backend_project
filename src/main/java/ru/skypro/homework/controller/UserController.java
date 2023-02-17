@@ -22,6 +22,9 @@ import ru.skypro.homework.service.UserService;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+/**
+ * The type User controller.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -39,6 +42,13 @@ public class UserController {
      */
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    /**
+     * Sets password.
+     *
+     * @param passwordDto the password dto
+     * @return the password
+     * @throws CredentialNotFoundException the credential not found exception
+     */
     @Operation(
             summary = "setPassword",
             responses = {
@@ -68,6 +78,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     @Operation(
             summary = "getUser",
             responses = {
@@ -96,6 +111,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserDtoByUsername(myUser.getUsername()));
     }
 
+    /**
+     * Update user response entity.
+     *
+     * @param userDto the user dto
+     * @return the response entity
+     */
     @Operation(
             summary = "updateUser",
             responses = {
@@ -127,6 +148,13 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userDto, myUser.getUsername()));
     }
 
+    /**
+     * Update user image response entity.
+     *
+     * @param image the image
+     * @return the response entity
+     * @throws Exception the exception
+     */
     @Operation(
             summary = "updateUserImage",
             responses = {

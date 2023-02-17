@@ -2,6 +2,7 @@ package ru.skypro.homework.mappers.ad;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.AdImage;
@@ -12,11 +13,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Mapper
-public abstract class AdsMapper {
+/**
+ * The type Ads mapper.
+ */
+@Service
+public class AdsMapper {
 
+    /**
+     * The constant INSTANCE.
+     */
     public static AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
+    /**
+     * To dto ad dto.
+     *
+     * @param ad the ad
+     * @return the ad dto
+     */
     public AdDto toDto(Ad ad) {
         if ( ad == null ) {
             return null;
@@ -38,6 +51,12 @@ public abstract class AdsMapper {
         return adDto;
     }
 
+    /**
+     * To entity ad.
+     *
+     * @param adDto the ad dto
+     * @return the ad
+     */
     public Ad toEntity(AdDto adDto) {
         if ( adDto == null ) {
             return null;

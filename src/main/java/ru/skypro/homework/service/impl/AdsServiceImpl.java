@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.ad.AdCommentDto;
 import ru.skypro.homework.dto.ad.AdDto;
 import ru.skypro.homework.dto.ad.CreateAdsDto;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Ads service.
+ */
 @Service
 public class AdsServiceImpl implements AdsService {
     private final AdRepository adRepository;
@@ -38,6 +42,15 @@ public class AdsServiceImpl implements AdsService {
     private final MyUser myUser;
 
 
+    /**
+     * Instantiates a new Ads service.
+     *
+     * @param adRepository        the ad repository
+     * @param adCommentRepository the ad comment repository
+     * @param adImageRepository   the ad image repository
+     * @param myUser              the my user
+     * @param userRepository      the user repository
+     */
     public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository, AdImageRepository adImageRepository,
                           MyUser myUser, UserRepository userRepository) {
         this.adRepository = adRepository;
@@ -63,6 +76,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    @Transactional
     public AdDto createAd(CreateAdsDto createAdsDto, List<AdImage> imageSaved) {
         logger.info("Metod\"AdsServiceImpl.createAd()\" was called");
         Ad ad = CreateAdsMapper.INSTANCE.toEntity(createAdsDto);

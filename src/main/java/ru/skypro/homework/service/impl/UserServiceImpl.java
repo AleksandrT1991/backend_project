@@ -29,12 +29,18 @@ import static java.nio.file.Files.createDirectories;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static ru.skypro.homework.mappers.user.UserMapper.toDto;
 
+/**
+ * The type User service.
+ */
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserImageRepository userImageRepository;
+    /**
+     * The User mapper.
+     */
     public final  UserMapper userMapper;
     private final MyUserDetailsService manager;
     private final PasswordEncoder passwordEncoder;
@@ -43,6 +49,15 @@ public class UserServiceImpl implements UserService {
      */
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param userRepository      the user repository
+     * @param userImageRepository the user image repository
+     * @param userMapper          the user mapper
+     * @param manager             the manager
+     * @param passwordEncoder     the password encoder
+     */
     public UserServiceImpl(UserRepository userRepository, UserImageRepository userImageRepository, UserMapper userMapper, MyUserDetailsService manager, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userImageRepository = userImageRepository;
@@ -73,12 +88,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
-//    @Override
-////    public UserDto getUser() {
-////        return null;
-////    }
-
     /**
      * event recording process
      * @return
@@ -93,10 +102,13 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto, String username) {
         logger.info("Metod\"UserServiceImpl.updateUser()\" was called");
         User user = getUser(username);
+        user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
         user.setCity(userDto.getCity());
+        user.setRegDate(userDto.getRegDate());
+        user.setUsername(userDto.getEmail());
         User response = userRepository.save(user);
         return userMapper.toDto(response);
 
@@ -129,9 +141,6 @@ public class UserServiceImpl implements UserService {
         userImage.setMediaType(image.getContentType());
         userImage.setUser(imageUser);
         userImageRepository.save(userImage);
-
-        imageUser.setImage(userImage);
-        userRepository.save(imageUser);
     }
 
     private String getExtension(String fileName) {
