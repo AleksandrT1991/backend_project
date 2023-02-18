@@ -27,12 +27,16 @@ import ru.skypro.homework.entity.AdImage;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.entity.UserImage;
 import ru.skypro.homework.repository.AdImageRepository;
+import ru.skypro.homework.repository.AdRepository;
 
 @ContextConfiguration(classes = {AdsImageServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class AdsImageServiceImplTest {
     @MockBean
     private AdImageRepository adImageRepository;
+
+    @MockBean
+    private AdRepository adRepository;
 
     @Autowired
     private AdsImageServiceImpl adsImageServiceImpl;
@@ -43,6 +47,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testCreateImage() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R011 Sandboxing policy violation.
+        //   Diffblue Cover ran code in your project that tried
+        //     to access files outside the temporary directory (file '${ad.image.dir.path}', permission 'write').
+        //   Diffblue Cover's default sandboxing policy disallows this in order to prevent
+        //   your code from damaging your system environment.
+        //   See https://diff.blue/R011 to resolve this issue.
+
         adsImageServiceImpl
                 .createImage(new MockMultipartFile("Name", new ByteArrayInputStream("AAAAAAAA".getBytes("UTF-8"))));
     }
@@ -53,6 +65,20 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testCreateImage2() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.nio.file.InvalidPathException: Illegal char <"> at index 26: ${ad.image.dir.path}\Metod"AdsImageServiceImpl.createImage()" was called.
+        //       at sun.nio.fs.WindowsPathParser.normalize(WindowsPathParser.java:182)
+        //       at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:153)
+        //       at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:77)
+        //       at sun.nio.fs.WindowsPath.parse(WindowsPath.java:92)
+        //       at sun.nio.fs.WindowsFileSystem.getPath(WindowsFileSystem.java:229)
+        //       at java.nio.file.Path.of(Path.java:147)
+        //       at ru.skypro.homework.service.impl.AdsImageServiceImpl.createImage(AdsImageServiceImpl.java:55)
+        //   See https://diff.blue/R013 to resolve this issue.
+
         adsImageServiceImpl.createImage(new MockMultipartFile("Metod\"AdsImageServiceImpl.createImage()\" was called",
                 new ByteArrayInputStream("AAAAAAAA".getBytes("UTF-8"))));
     }
@@ -63,6 +89,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testCreateImage3() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.NullPointerException
+        //       at ru.skypro.homework.service.impl.AdsImageServiceImpl.createImage(AdsImageServiceImpl.java:55)
+        //   See https://diff.blue/R013 to resolve this issue.
+
         adsImageServiceImpl.createImage(null);
     }
 
@@ -72,6 +106,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testCreateImage4() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R011 Sandboxing policy violation.
+        //   Diffblue Cover ran code in your project that tried
+        //     to access files outside the temporary directory (file '${ad.image.dir.path}', permission 'write').
+        //   Diffblue Cover's default sandboxing policy disallows this in order to prevent
+        //   your code from damaging your system environment.
+        //   See https://diff.blue/R011 to resolve this issue.
+
         MultipartFile multipartFile = mock(MultipartFile.class);
         when(multipartFile.getName()).thenReturn("Name");
         when(multipartFile.getOriginalFilename()).thenReturn("foo.txt");
@@ -84,6 +126,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testUpdateAdsImage() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R011 Sandboxing policy violation.
+        //   Diffblue Cover ran code in your project that tried
+        //     to access files outside the temporary directory (file '${ad.image.dir.path}', permission 'write').
+        //   Diffblue Cover's default sandboxing policy disallows this in order to prevent
+        //   your code from damaging your system environment.
+        //   See https://diff.blue/R011 to resolve this issue.
+
         adsImageServiceImpl.updateAdsImage(123L,
                 new MockMultipartFile("Name", new ByteArrayInputStream("AAAAAAAA".getBytes("UTF-8"))));
     }
@@ -94,6 +144,20 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testUpdateAdsImage2() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.nio.file.InvalidPathException: Illegal char <"> at index 26: ${ad.image.dir.path}\Metod"AdsImageServiceImpl.updateAdsImage()" was called.
+        //       at sun.nio.fs.WindowsPathParser.normalize(WindowsPathParser.java:182)
+        //       at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:153)
+        //       at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:77)
+        //       at sun.nio.fs.WindowsPath.parse(WindowsPath.java:92)
+        //       at sun.nio.fs.WindowsFileSystem.getPath(WindowsFileSystem.java:229)
+        //       at java.nio.file.Path.of(Path.java:147)
+        //       at ru.skypro.homework.service.impl.AdsImageServiceImpl.updateAdsImage(AdsImageServiceImpl.java:78)
+        //   See https://diff.blue/R013 to resolve this issue.
+
         adsImageServiceImpl.updateAdsImage(123L,
                 new MockMultipartFile("Metod\"AdsImageServiceImpl.updateAdsImage()\" was called",
                         new ByteArrayInputStream("AAAAAAAA".getBytes("UTF-8"))));
@@ -105,6 +169,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testUpdateAdsImage3() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.NullPointerException
+        //       at ru.skypro.homework.service.impl.AdsImageServiceImpl.updateAdsImage(AdsImageServiceImpl.java:78)
+        //   See https://diff.blue/R013 to resolve this issue.
+
         adsImageServiceImpl.updateAdsImage(123L, null);
     }
 
@@ -114,6 +186,14 @@ class AdsImageServiceImplTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testUpdateAdsImage4() throws IOException {
+        // TODO: Complete this test.
+        //   Reason: R011 Sandboxing policy violation.
+        //   Diffblue Cover ran code in your project that tried
+        //     to access files outside the temporary directory (file '${ad.image.dir.path}', permission 'write').
+        //   Diffblue Cover's default sandboxing policy disallows this in order to prevent
+        //   your code from damaging your system environment.
+        //   See https://diff.blue/R011 to resolve this issue.
+
         MultipartFile multipartFile = mock(MultipartFile.class);
         when(multipartFile.getName()).thenReturn("Name");
         when(multipartFile.getOriginalFilename()).thenReturn("foo.txt");
