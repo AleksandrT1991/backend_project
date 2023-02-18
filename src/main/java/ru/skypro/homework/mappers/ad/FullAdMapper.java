@@ -21,7 +21,6 @@ public class FullAdMapper {
     /**
      * The constant INSTANCE.
      */
-    public static FullAdMapper INSTANCE = Mappers.getMapper( FullAdMapper.class );
 
     /**
      * To dto full ad dto.

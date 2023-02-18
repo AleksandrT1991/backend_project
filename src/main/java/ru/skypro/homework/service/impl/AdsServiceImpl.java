@@ -41,6 +41,9 @@ public class AdsServiceImpl implements AdsService {
 
     private final MyUser myUser;
 
+    private final AdsMapper adsMapper;
+    private final FullAdMapper fullAdsMapper;
+
 
     /**
      * Instantiates a new Ads service.
@@ -49,14 +52,18 @@ public class AdsServiceImpl implements AdsService {
      * @param adCommentRepository the ad comment repository
      * @param adImageRepository   the ad image repository
      * @param myUser              the my user
+     * @param adsMapper
+     * @param fullAdsMapper
      * @param userRepository      the user repository
      */
     public AdsServiceImpl(AdRepository adRepository, AdCommentRepository adCommentRepository, AdImageRepository adImageRepository,
-                          MyUser myUser, UserRepository userRepository) {
+                          MyUser myUser, AdsMapper adsMapper, FullAdMapper fullAdsMapper, UserRepository userRepository) {
         this.adRepository = adRepository;
         this.adCommentRepository = adCommentRepository;
         this.adImageRepository = adImageRepository;
         this.myUser = myUser;
+        this.adsMapper = adsMapper;
+        this.fullAdsMapper = fullAdsMapper;
         this.userRepository = userRepository;
     }
     /**
@@ -68,7 +75,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAds getAds() {
         logger.info("Metod\"AdsServiceImpl.getAds()\" was called");
-        List<AdDto> ads = adRepository.findAll().stream().map(a->AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
+        List<AdDto> ads = adRepository.findAll().stream().map(a->adsMapper.toDto(a)).collect(Collectors.toList());
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         responseWrapperAds.setCount(ads.size());
         responseWrapperAds.setResults(ads);
@@ -85,7 +92,7 @@ public class AdsServiceImpl implements AdsService {
         user.setId(myUser.getUser().getId());
         ad.setUser(user);
         Ad save = adRepository.save(ad);
-        return AdsMapper.INSTANCE.toDto(save);
+        return adsMapper.toDto(save);
     }
 
     @Override
@@ -119,7 +126,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAdDto getFullAd(Long id) {
         logger.info("Metod\"AdsServiceImpl.getFullAd()\" was called");
-        return FullAdMapper.INSTANCE.toDto(
+        return fullAdsMapper.toDto(
                 adRepository.findByPk(id));
     }
 
@@ -138,7 +145,7 @@ public class AdsServiceImpl implements AdsService {
         byPk.setDescription(createAdsDto.getDescription());
         byPk.setPrice(createAdsDto.getPrice());
         byPk.setTitle(createAdsDto.getTitle());
-        return AdsMapper.INSTANCE.toDto(adRepository.save(byPk));
+        return adsMapper.toDto(adRepository.save(byPk));
     }
 
     @Override
@@ -181,7 +188,7 @@ public class AdsServiceImpl implements AdsService {
         Optional<User> userByUsername = userRepository.findUserByUsername(username);
         List<AdDto> ads = adRepository.findAllByUser_Id(userByUsername.orElseThrow(EntityNotFoundException::new)
                                             .getId()).stream()
-                                            .map(a-> AdsMapper.INSTANCE.toDto(a)).collect(Collectors.toList());
+                                            .map(a-> adsMapper.toDto(a)).collect(Collectors.toList());
         ResponseWrapperAds responseWrapperAds = new ResponseWrapperAds();
         responseWrapperAds.setCount(ads.size());
         responseWrapperAds.setResults(ads);

@@ -14,11 +14,6 @@ import ru.skypro.homework.entity.UserImage;
  */
 @Service
 public class UserMapper {
-    /**
-     * The constant INSTANCE.
-     */
-    public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
 
     /**
      * To dto user dto.

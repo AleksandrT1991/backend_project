@@ -22,7 +22,6 @@ public class AdsMapper {
     /**
      * The constant INSTANCE.
      */
-    public static AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
 
     /**
      * To dto ad dto.
