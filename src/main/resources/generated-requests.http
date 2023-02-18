@@ -14,11 +14,11 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-   "username": "user",
-   "password": "password",
-   "firstName":  " asdad",
-   "lastName": " asdad",
-   "phone":  " asdad"
+  "username": "user",
+  "password": "password",
+  "firstName":  " asdad",
+  "lastName": " asdad",
+  "phone":  " asdad"
 }
 
 ###
@@ -41,9 +41,8 @@ Content-Type: application/json
 Authorization: Basic user@gmail.com password
 
 ###
-PATCH http://localhost:8080/users/me
+POST http://localhost:8080/users/
 Content-Type: application/json
-Authorization: Basic user password
 
 {
   "phone": "33333",
@@ -76,23 +75,58 @@ Authorization: Basic user password
 
 ###
 POST http://localhost:8080/ads
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition:form-data; name="properties"
 Content-Type: application/json
-Authorization: Basic user password
 
 {
-  "image": "123",
-  "price": 123,
-  "description": "123",
-  "pk": 1233,
-  "title": "123"
+  "description": "test ad desc",
+  "price": 1000,
+  "title": "test ad title"
 }
+
+--WebAppBoundary
+Content-Disposition:form-data; name="image"; filename="ikanvas.jpg"
+Content-Type: application/octet-stream
+
+< ./ikanvas.jpg
+--WebAppBoundary
+
+###
+POST http://localhost:8080/ads
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition:form-data; name="properties"
+Content-Type: application/json
+
+{
+  "description": "test ad desc 2",
+  "price": 1001,
+  "title": "test ad title 2"
+}
+
+--WebAppBoundary
+Content-Disposition:form-data; name="image"; filename="ikanvas.jpg"
+Content-Type: application/octet-stream
+
+< ./999.jpg
+--WebAppBoundary
+
+###
+PATCH http://localhost:8080/users/me/image
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition:form-data; name="image"; filename="ikanvas.jpg"
+Content-Type: application/octet-stream
+
+< ./u.jpg
+--WebAppBoundary
 
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
 Authorization: Basic user password
-
-
-
-
-
