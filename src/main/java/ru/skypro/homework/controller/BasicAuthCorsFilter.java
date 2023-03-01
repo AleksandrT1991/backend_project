@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The type Basic auth cors filter.
+ */
 @Component
 public class BasicAuthCorsFilter extends OncePerRequestFilter {
 
